@@ -25,4 +25,5 @@ platforms:
   - type: docker
     image: node
   - type: nextflow
+    image: node
   - type: native
