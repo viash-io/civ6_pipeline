@@ -23,6 +23,8 @@ functionality:
 platforms:
   - type: docker
     image: dpokidov/imagemagick
+    setup:
+      - type: apt
+        packages: [ "procps" ]
   - type: nextflow
-    image: dpokidov/imagemagick
   - type: native
