@@ -1,0 +1,30 @@
+functionality:
+  name: parse_header
+  namespace: civ6_save_renderer
+  description: "Extract game settings from a Civ6 save file as a yaml."
+  arguments:
+    - name: "--input"
+      alternatives: [-i]
+      type: file
+      required: true
+      default: "save.Civ6Save"
+      must_exist: true
+      description: "A Civ6 save file."
+    - name: "--output"
+      alternatives: [-o]
+      type: file
+      required: true
+      default: "output.yaml"
+      direction: output
+      description: "Path to store the output YAML at."
+  resources:
+    - type: bash_script
+      path: script.sh
+platforms:
+  - type: docker
+    image: node
+    docker:
+      run: 
+        - cd /home/node && npm install civ6-save-parser
+  - type: nextflow
+  - type: native

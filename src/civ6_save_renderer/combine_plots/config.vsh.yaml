@@ -1,0 +1,35 @@
+functionality:
+  name: combine_plots
+  namespace: civ6_save_renderer
+  description: Combine multiple images into a movie using ffmpeg.
+  arguments:
+    - name: "--input"
+      alternatives: [-i]
+      type: file
+      required: true
+      default: "/path/to/my/dir"
+      must_exist: true
+      multiple: true
+      description: A list of images.
+    - name: "--output"
+      alternatives: [-o]
+      type: file
+      required: true
+      default: "output.webm"
+      direction: output
+      description: A path to output the movie to.
+    - name: "--framerate"
+      alternatives: [-f]
+      type: integer
+      default: 4
+      description: Number of frames per second.
+  resources:
+    - type: bash_script
+      path: script.sh
+platforms:
+  - type: docker
+    image: jrottenberg/ffmpeg
+  - type: nextflow
+    image: jrottenberg/ffmpeg
+    publish: true
+  - type: native

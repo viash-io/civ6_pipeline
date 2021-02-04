@@ -1,0 +1,26 @@
+functionality:
+  name: cat_format
+  description: |
+    cat a file and wrap it in a fenced code block with
+    an optional format identifier.
+  arguments:
+    - name: "input"
+      type: file
+      required: true
+      must_exist: true
+      description: "Input file"
+    - name: "--format"
+      alternatives: [ "-f" ]
+      type: string
+      required: false
+      default: ${VIASH_PAR_INPUT##*.}
+      description: "Format for code block"
+    - name: "--cut"
+      alternative: [ "-c" ]
+      type: boolean_true
+      description: "Cut the file after 10 lines"
+  resources:
+    - type: bash_script
+      path: script.sh
+platforms:
+  - type: native

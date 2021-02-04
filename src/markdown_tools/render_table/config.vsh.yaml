@@ -1,0 +1,16 @@
+functionality:
+  name: render_table
+  namespace: markdown_tools
+  description: "Render a markdown table from a csv/tsv blob"
+  arguments:
+    - name: "input"
+      type: file
+      required: true
+      must_exist: true
+  resources:
+    - type: r_script
+      path: script.R
+platforms:
+  - type: docker
+    image: rocker/tidyverse
+  - type: native
