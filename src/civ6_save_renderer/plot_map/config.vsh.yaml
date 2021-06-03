@@ -7,7 +7,6 @@ functionality:
       alternatives: [-y]
       type: file
       required: true
-      default: "header.yaml"
       must_exist: true
       description: "A YAML file containing civ6 game settings information."
     - name: "--tsv"
