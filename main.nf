@@ -17,8 +17,8 @@ workflow {
     if (!params.containsKey("input") || params.input == "") {
         exit 1, "ERROR: Please provide a --input parameter pointing to .Civ6Save file(s)"
     }
-    if (!params.containsKey("output") || params.input == "") {
-        exit 1, "ERROR: Please provide a --output parameter pointing to the directory to store output"
+    if (!params.containsKey("publishDir") || params.publishDir == "") {
+        exit 1, "ERROR: Please provide a --publishDir parameter pointing to the directory to store output"
     }
 
     def listToTriplet = { it -> [ "", it.collect{ a -> a[1] }, params ] }
