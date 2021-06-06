@@ -7,5 +7,4 @@ bin/nextflow \
   -main-script workflows/run/main.nf \
   --input "data/*.Civ6Save" \
   --publishDir "output" \
-  -resume \
-  -c workflows/run/nextflow.config # TODO: need to be able to remove this at some point
+  -resume
