@@ -672,5 +672,5 @@ info:
   output: "target/nextflow/civ6_save_renderer/parse_header"
   executable: "target/nextflow/civ6_save_renderer/parse_header/parse_header"
   viash_version: "0.5.0-rc2"
-  git_commit: "0428ce615aff31f6556bd5738deb3284b50a24cf"
+  git_commit: "fb8b2bc8f8280128e346e99bda2bfa1724e77691"
   git_remote: "https://github.com/viash-io/civ6_pipeline"
