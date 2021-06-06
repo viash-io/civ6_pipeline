@@ -20,33 +20,27 @@
 > --input <...> has to be specified when running this module standalone.
 > output in parse_map is set to be required.
 > --output <...> has to be specified when running this module standalone.
-Exporting src/civ6_save_renderer/plot_map/ (civ6_save_renderer) =docker=> target/docker/civ6_save_renderer/plot_map
 Exporting src/civ6_save_renderer/parse_header/ (civ6_save_renderer) =nextflow=> target/nextflow/civ6_save_renderer/parse_header
+Exporting src/civ6_save_renderer/plot_map/ (civ6_save_renderer) =docker=> target/docker/civ6_save_renderer/plot_map
 Exporting src/civ6_save_renderer/convert_plot/ (civ6_save_renderer) =docker=> target/docker/civ6_save_renderer/convert_plot
-[notice] Running 'docker build -t /civ6_save_renderer_convert_plot:main_build --no-cache /tmp/viashsetupdocker-convert_plot-5D8MaZ'
-[notice] Running 'docker build -t /civ6_save_renderer_plot_map:main_build --no-cache /tmp/viashsetupdocker-plot_map-sKgArI'
+[notice] Running 'docker build -t /civ6_save_renderer_plot_map:main_build --no-cache /tmp/viashsetupdocker-plot_map-vr1CPj'
+[notice] Running 'docker build -t /civ6_save_renderer_convert_plot:main_build --no-cache /tmp/viashsetupdocker-convert_plot-FO2jJ1'
 [error] Error occurred while building the container /civ6_save_renderer_plot_map:main_build --no-cache.
 [error] Transcript: --------------------------------
 [error] Error occurred while building the container /civ6_save_renderer_convert_plot:main_build --no-cache.
 [error] Transcript: --------------------------------
+invalid argument "/civ6_save_renderer_convert_plot:main_build" for "-t, --tag" flag: invalid reference format
+See 'docker build --help'.
 invalid argument "/civ6_save_renderer_plot_map:main_build" for "-t, --tag" flag: invalid reference format
 See 'docker build --help'.
 [error] End of transcript --------------------------
-Exporting src/civ6_save_renderer/plot_map/ (civ6_save_renderer) =nextflow=> target/nextflow/civ6_save_renderer/plot_map
-invalid argument "/civ6_save_renderer_convert_plot:main_build" for "-t, --tag" flag: invalid reference format
-See 'docker build --help'.
 [error] End of transcript --------------------------
 Exporting src/civ6_save_renderer/convert_plot/ (civ6_save_renderer) =nextflow=> target/nextflow/civ6_save_renderer/convert_plot
 Exporting src/civ6_save_renderer/parse_map/ (civ6_save_renderer) =docker=> target/docker/civ6_save_renderer/parse_map
+Exporting src/civ6_save_renderer/plot_map/ (civ6_save_renderer) =nextflow=> target/nextflow/civ6_save_renderer/plot_map
 Exporting src/civ6_save_renderer/combine_plots/ (civ6_save_renderer) =docker=> target/docker/civ6_save_renderer/combine_plots
-[notice] Running 'docker build -t /civ6_save_renderer_parse_map:main_build --no-cache /tmp/viashsetupdocker-parse_map-1z91uW'
-[notice] Running 'docker build -t /civ6_save_renderer_combine_plots:main_build --no-cache /tmp/viashsetupdocker-combine_plots-p0Jj1H'
-[error] Error occurred while building the container /civ6_save_renderer_parse_map:main_build --no-cache.
-[error] Transcript: --------------------------------
-invalid argument "/civ6_save_renderer_parse_map:main_build" for "-t, --tag" flag: invalid reference format
-See 'docker build --help'.
-[error] End of transcript --------------------------
-Exporting src/civ6_save_renderer/parse_map/ (civ6_save_renderer) =nextflow=> target/nextflow/civ6_save_renderer/parse_map
+[notice] Running 'docker build -t /civ6_save_renderer_parse_map:main_build --no-cache /tmp/viashsetupdocker-parse_map-mHXoLo'
+[notice] Running 'docker build -t /civ6_save_renderer_combine_plots:main_build --no-cache /tmp/viashsetupdocker-combine_plots-ZuYXIa'
 [error] Error occurred while building the container /civ6_save_renderer_combine_plots:main_build --no-cache.
 [error] Transcript: --------------------------------
 invalid argument "/civ6_save_renderer_combine_plots:main_build" for "-t, --tag" flag: invalid reference format
@@ -54,7 +48,13 @@ See 'docker build --help'.
 [error] End of transcript --------------------------
 Exporting src/civ6_save_renderer/combine_plots/ (civ6_save_renderer) =nextflow=> target/nextflow/civ6_save_renderer/combine_plots
 Exporting src/civ6_save_renderer/parse_header/ (civ6_save_renderer) =docker=> target/docker/civ6_save_renderer/parse_header
-[notice] Running 'docker build -t /civ6_save_renderer_parse_header:main_build --no-cache /tmp/viashsetupdocker-parse_header-EcguYE'
+[error] Error occurred while building the container /civ6_save_renderer_parse_map:main_build --no-cache.
+[error] Transcript: --------------------------------
+invalid argument "/civ6_save_renderer_parse_map:main_build" for "-t, --tag" flag: invalid reference format
+See 'docker build --help'.
+[error] End of transcript --------------------------
+Exporting src/civ6_save_renderer/parse_map/ (civ6_save_renderer) =nextflow=> target/nextflow/civ6_save_renderer/parse_map
+[notice] Running 'docker build -t /civ6_save_renderer_parse_header:main_build --no-cache /tmp/viashsetupdocker-parse_header-Jc0Fhu'
 [error] Error occurred while building the container /civ6_save_renderer_parse_header:main_build --no-cache.
 [error] Transcript: --------------------------------
 invalid argument "/civ6_save_renderer_parse_header:main_build" for "-t, --tag" flag: invalid reference format
