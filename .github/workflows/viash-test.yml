@@ -37,11 +37,14 @@ jobs:
 
         # run tests
         bin/viash_test --append=false --log=check_results/results.tsv
-        
+
     - name: Run pipeline
       run: |
         workflows/run/run.sh
-        mv work check_results
+        # remove output files
+        find work -name "*.pdf" -o -name "*.png" -o -name "*.webm" -type f -delete
+        # move nextflow logs to check results
+        mv work check_results/nextflow_work
 
     - name: Upload check results
       uses: actions/upload-artifact@master
