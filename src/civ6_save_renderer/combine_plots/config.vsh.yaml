@@ -7,7 +7,7 @@ functionality:
       alternatives: [-i]
       type: file
       required: true
-      default: "/path/to/my/dir"
+      example: "/path/to/my/dir"
       must_exist: true
       multiple: true
       description: A list of images.

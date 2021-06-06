@@ -7,14 +7,14 @@ functionality:
       alternatives: [ "-i" ]
       type: file
       required: true
-      default: "input.pdf"
+      example: "input.pdf"
       must_exist: true
       description: "A PDF input file."
     - name: "--output"
       alternatives: [ "-o" ]
       type: file
       required: true
-      default: "output.png"
+      example: "output.png"
       direction: output
       description: "Output path."
   resources:

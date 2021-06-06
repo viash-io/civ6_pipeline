@@ -7,20 +7,21 @@ functionality:
       alternatives: [-y]
       type: file
       required: true
+      example: "header.yaml"
       must_exist: true
       description: "A YAML file containing civ6 game settings information."
     - name: "--tsv"
       alternatives: [-t]
       type: file
       required: true
-      default: "map.tsv"
+      example: "map.tsv"
       must_exist: true
       description: "A TSV file containing civ6 map information."
     - name: "--output"
       alternatives: [-o]
       type: file
       required: true
-      default: "output.pdf"
+      example: "output.pdf"
       direction: output
       description: "Path to store the output PDF file at."
   resources:
