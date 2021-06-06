@@ -37,6 +37,11 @@ jobs:
 
         # run tests
         bin/viash_test --append=false --log=check_results/results.tsv
+        
+    - name: Run pipeline
+      run: |
+        workflows/run/run.sh
+        mv work check_results
 
     - name: Upload check results
       uses: actions/upload-artifact@master
