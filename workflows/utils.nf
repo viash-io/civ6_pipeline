@@ -19,21 +19,14 @@ process rename {
 
 }
 
-def generateSummary() {
-    summary = "\n"
-    summary += "Command Line:\n  ${ workflow.commandLine }\n"
-    summary += "Pipeline completed at: $workflow.complete\n"
-    summary += "Workflow revision:     ${ workflow.revision }\n"
-    summary += "Launch Dir:            ${ workflow.launchDir }\n"
-    summary += "Work Dir:              ${ workflow.workDir }\n"
-    summary += "Project Dir:           ${ workflow.projectDir }\n"
-    summary += "Username:              ${ workflow.userName }\n"
-    summary += "\n"
+workflow transcript {
 
-    summary
+    Channel.from(params) | publishParams
+
+    Channel.from(generateSummary()) | publishSummary
 }
 
-process storeSummary {
+process publishSummary {
 
   input:
     val(content)
@@ -54,7 +47,7 @@ process storeSummary {
 
 import static groovy.json.JsonOutput.*
 
-process storeParams {
+process publishParams {
 
   input:
     val(pars)
@@ -73,3 +66,17 @@ process storeParams {
   """
 
 }
+
+def generateSummary() {
+    summary = "\n"
+    summary += "Command Line:\n  ${ workflow.commandLine.split(" -").join("\n    -") }\n"
+    summary += "Workflow revision:     ${ workflow.revision }\n"
+    summary += "Launch Dir:            ${ workflow.launchDir }\n"
+    summary += "Work Dir:              ${ workflow.workDir }\n"
+    summary += "Project Dir:           ${ workflow.projectDir }\n"
+    summary += "Username:              ${ workflow.userName }\n"
+    summary += "\n"
+
+    summary
+}
+
