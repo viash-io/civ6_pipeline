@@ -18,3 +18,58 @@ process rename {
     """
 
 }
+
+def generateSummary() {
+    summary = "\n"
+    summary += "Command Line:\n  ${ workflow.commandLine }\n"
+    summary += "Pipeline completed at: $workflow.complete\n"
+    summary += "Workflow revision:     ${ workflow.revision }\n"
+    summary += "Launch Dir:            ${ workflow.launchDir }\n"
+    summary += "Work Dir:              ${ workflow.workDir }\n"
+    summary += "Project Dir:           ${ workflow.projectDir }\n"
+    summary += "Username:              ${ workflow.userName }\n"
+    summary += "\n"
+
+    summary
+}
+
+process storeSummary {
+
+  input:
+    val(content)
+
+  output:
+    path("summary.txt")
+
+  publishDir "$params.logDir"
+
+  afterScript 'echo Stored params...'
+
+  shell:
+  """
+  echo "$content" > summary.txt
+  """
+
+}
+
+import static groovy.json.JsonOutput.*
+
+process storeParams {
+
+  input:
+    val(pars)
+
+  output:
+    path("params.txt")
+
+  publishDir "$params.logDir"
+
+  afterScript 'echo Stored params...'
+
+  shell:
+  def pp = prettyPrint(toJson(params))
+  """
+  echo "$pp" > params.txt
+  """
+
+}

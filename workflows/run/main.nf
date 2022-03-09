@@ -1,5 +1,7 @@
 nextflow.enable.dsl=2
 
+import static groovy.json.JsonOutput.*
+
 workflowDir = "${params.rootDir}/workflows"
 targetDir = "${params.rootDir}/target/nextflow"
 
@@ -9,6 +11,9 @@ include  { convert_plot }  from  targetDir + '/civ6_save_renderer/convert_plot/m
 include  { parse_header }  from  targetDir + '/civ6_save_renderer/parse_header/main.nf'   params(params)
 include  { parse_map }     from  targetDir + '/civ6_save_renderer/parse_map/main.nf'      params(params)
 include  { rename }        from  workflowDir + '/utils.nf'
+include  { storeParams }   from  workflowDir + '/utils.nf'
+include  { storeSummary }  from  workflowDir + '/utils.nf'
+include  { generateSummary} from  workflowDir + '/utils.nf'
 
 workflow {
 
@@ -37,4 +42,15 @@ workflow {
         | map( listToTriplet ) \
         | combine_plots
 
+    Channel.from(params) | storeParams
+
+    Channel.from("") | map{ generateSummary() } | storeSummary
+
 }
+
+workflow.onComplete {
+
+    println(generateSummary())
+
+}
+
