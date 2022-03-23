@@ -1,0 +1,42 @@
+> input in convert_plot is set to be required.
+> --input <...> has to be specified when running this module standalone.
+> output in convert_plot is set to be required.
+> --output <...> has to be specified when running this module standalone.
+> input in combine_plots is set to be required.
+> --input <...> has to be specified when running this module standalone.
+> output in combine_plots is set to be required.
+> --output <...> has to be specified when running this module standalone.
+> input in parse_header is set to be required.
+> --input <...> has to be specified when running this module standalone.
+> output in parse_header is set to be required.
+> --output <...> has to be specified when running this module standalone.
+> input in parse_map is set to be required.
+> --input <...> has to be specified when running this module standalone.
+> output in parse_map is set to be required.
+> --output <...> has to be specified when running this module standalone.
+> yaml in plot_map is set to be required.
+> --yaml <...> has to be specified when running this module standalone.
+> tsv in plot_map is set to be required.
+> --tsv <...> has to be specified when running this module standalone.
+> output in plot_map is set to be required.
+> --output <...> has to be specified when running this module standalone.
+Exporting convert_plot (civ6_save_renderer) =docker=> target/docker/civ6_save_renderer/convert_plot
+Exporting parse_header (civ6_save_renderer) =nextflow=> target/nextflow/civ6_save_renderer/parse_header
+Exporting parse_header (civ6_save_renderer) =native=> target/native/civ6_save_renderer/parse_header
+[notice] Building container 'civ6_save_renderer_convert_plot:main_build' with Dockerfile
+Exporting parse_map (civ6_save_renderer) =docker=> target/docker/civ6_save_renderer/parse_map
+[notice] Building container 'civ6_save_renderer_parse_map:main_build' with Dockerfile
+Exporting convert_plot (civ6_save_renderer) =nextflow=> target/nextflow/civ6_save_renderer/convert_plot
+Exporting convert_plot (civ6_save_renderer) =native=> target/native/civ6_save_renderer/convert_plot
+Exporting combine_plots (civ6_save_renderer) =docker=> target/docker/civ6_save_renderer/combine_plots
+[notice] Building container 'civ6_save_renderer_combine_plots:main_build' with Dockerfile
+Exporting combine_plots (civ6_save_renderer) =nextflow=> target/nextflow/civ6_save_renderer/combine_plots
+Exporting combine_plots (civ6_save_renderer) =native=> target/native/civ6_save_renderer/combine_plots
+Exporting parse_header (civ6_save_renderer) =docker=> target/docker/civ6_save_renderer/parse_header
+[notice] Building container 'civ6_save_renderer_parse_header:main_build' with Dockerfile
+Exporting parse_map (civ6_save_renderer) =nextflow=> target/nextflow/civ6_save_renderer/parse_map
+Exporting parse_map (civ6_save_renderer) =native=> target/native/civ6_save_renderer/parse_map
+Exporting plot_map (civ6_save_renderer) =docker=> target/docker/civ6_save_renderer/plot_map
+[notice] Building container 'civ6_save_renderer_plot_map:main_build' with Dockerfile
+Exporting plot_map (civ6_save_renderer) =nextflow=> target/nextflow/civ6_save_renderer/plot_map
+Exporting plot_map (civ6_save_renderer) =native=> target/native/civ6_save_renderer/plot_map

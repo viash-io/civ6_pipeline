@@ -16,17 +16,35 @@ def checkParams(_params) {
 }
 
 
-def renderCLI(command, arguments) {
+def escape(str) {
+  return str.replaceAll('\\\\', '\\\\\\\\').replaceAll("\"", "\\\\\"").replaceAll("\n", "\\\\n").replaceAll("`", "\\\\`")
+}
 
-  def argumentsList = arguments.collect{ it ->
-    (it.otype == "")
-      ? "\'" + it.value + "\'"
-      : (it.type == "boolean_true")
-        ? it.otype + it.name
-        : (it.value == "no_default_value_configured")
-          ? ""
-          : it.otype + it.name + " \'" + ((it.value in List && it.multiple) ? it.value.join(it.multiple_sep): it.value) + "\'"
+def renderArg(it) {
+  if (it.otype == "") {
+    return "'" + escape(it.value) + "'"
+  } else if (it.type == "boolean_true") {
+    if (it.value.toLowerCase() == "true") {
+      return it.otype + it.name
+    } else {
+      return ""
+    }
+  } else if (it.type == "boolean_false") {
+    if (it.value.toLowerCase() == "true") {
+      return ""
+    } else {
+      return it.otype + it.name
+    }
+  } else if (it.value == "no_default_value_configured") {
+    return ""
+  } else {
+    def retVal = it.value in List && it.multiple ? it.value.join(it.multiple_sep): it.value
+    return it.otype + it.name + " '" + escape(retVal) + "'"
   }
+}
+
+def renderCLI(command, arguments) {
+  def argumentsList = arguments.collect{renderArg(it)}.findAll{it != ""}
 
   def command_line = command + argumentsList
 
@@ -34,11 +52,12 @@ def renderCLI(command, arguments) {
 }
 
 def effectiveContainer(processParams) {
+  def _organization = params.containsKey("containerOrganization") ? params.containerOrganization : processParams.containerOrganization
   def _registry = params.containsKey("containerRegistry") ? params.containerRegistry : processParams.containerRegistry
   def _name = processParams.container
   def _tag = params.containsKey("containerTag") ? params.containerTag : processParams.containerTag
 
-  return (_registry == "" ? "" : _registry + "/") + _name + ":" + _tag
+  return (_registry == "" ? "" : _registry + "/") + (_organization == "" ? "" : _organization + "/") + _name + ":" + _tag
 }
 
 // Convert the nextflow.config arguments list to a List instead of a LinkedHashMap
@@ -73,12 +92,12 @@ def outFromIn(_params) {
       // Unless the output argument is explicitly specified on the CLI
       def newValue =
         (it.value == "viash_no_value")
-          ? "convert_plot" + "." + extOrName
+          ? "convert_plot." + it.name + "." + extOrName
           : it.value
       def newName =
         (id != "")
-          ? id + newValue
-          : newValue
+          ? id + "." + newValue
+          : it.name + newValue
       it + [ value : newName ]
     }
 
@@ -140,11 +159,8 @@ def overrideIO(_params, inputs, outputs) {
 }
 
 process convert_plot_process {
-
-
   tag "${id}"
   echo { (params.debug == true) ? true : false }
-  cache 'deep'
   stageInMode "symlink"
   container "${container}"
 
@@ -152,12 +168,21 @@ process convert_plot_process {
     tuple val(id), path(input), val(output), val(container), val(cli), val(_params)
   output:
     tuple val("${id}"), path(output), val(_params)
+  stub:
+    """
+    # Adding NXF's `$moduleDir` to the path in order to resolve our own wrappers
+    export PATH="${moduleDir}:\$PATH"
+    STUB=1 $cli
+    """
   script:
+    def viash_temp = System.getenv("VIASH_TEMP") ?: "/tmp/"
     if (params.test)
       """
       # Some useful stuff
       export NUMBA_CACHE_DIR=/tmp/numba-cache
       # Running the pre-hook when necessary
+      # Pass viash temp dir
+      export VIASH_TEMP="${viash_temp}"
       # Adding NXF's `$moduleDir` to the path in order to resolve our own wrappers
       export PATH="./:${moduleDir}:\$PATH"
       ./${params.convert_plot.tests.testScript} | tee $output
@@ -167,6 +192,8 @@ process convert_plot_process {
       # Some useful stuff
       export NUMBA_CACHE_DIR=/tmp/numba-cache
       # Running the pre-hook when necessary
+      # Pass viash temp dir
+      export VIASH_TEMP="${viash_temp}"
       # Adding NXF's `$moduleDir` to the path in order to resolve our own wrappers
       export PATH="${moduleDir}:\$PATH"
       $cli
@@ -222,11 +249,11 @@ workflow convert_plot {
         effectiveContainer(finalParams),
         renderCLI([finalParams.command], finalParams.arguments),
         finalParams
-        )
+      )
     }
 
-  result_ = convert_plot_process(id_input_output_function_cli_params_) \
-    | join(id_input_params_) \
+  result_ = convert_plot_process(id_input_output_function_cli_params_)
+    | join(id_input_params_)
     | map{ id, output, _params, input, original_params ->
         def parsedOutput = _params.arguments
           .findAll{ it.type == "file" && it.direction == "Output" }
@@ -239,11 +266,9 @@ workflow convert_plot {
         new Tuple3(id, parsedOutput, original_params)
       }
 
-  result_ \
-    | filter { it[1].keySet().size() > 1 } \
-    | view{
-        ">> Be careful, multiple outputs from this component!"
-    }
+  result_
+     | filter { it[1].keySet().size() > 1 }
+     | view{">> Be careful, multiple outputs from this component!"}
 
   emit:
   result_.flatMap{ it ->

@@ -1,0 +1,11 @@
+namespace	functionality	platform	test_name	exit_code	duration	result
+civ6_save_renderer	parse_header	docker	build_executable	0	0	SUCCESS
+civ6_save_renderer	convert_plot	docker	build_executable	0	0	SUCCESS
+civ6_save_renderer	convert_plot	docker	tests	-1	0	MISSING
+civ6_save_renderer	parse_header	docker	tests	-1	0	MISSING
+civ6_save_renderer	parse_map	docker	build_executable	0	0	SUCCESS
+civ6_save_renderer	parse_map	docker	tests	-1	0	MISSING
+civ6_save_renderer	combine_plots	docker	build_executable	0	0	SUCCESS
+civ6_save_renderer	combine_plots	docker	tests	-1	0	MISSING
+civ6_save_renderer	plot_map	docker	build_executable	0	0	SUCCESS
+civ6_save_renderer	plot_map	docker	tests	-1	0	MISSING
