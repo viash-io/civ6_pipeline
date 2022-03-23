@@ -382,8 +382,8 @@ functionality:
             name = "combine_plots"
             container = "civ6_save_renderer_combine_plots"
             containerTag = "main_build"
-            containerRegistry = ""
-            containerOrganization = ""
+            containerRegistry = "ghcr.io"
+            containerOrganization = "viash-io/civ6_pipeline"
             command = "combine_plots"
             tests {
               isDefined = false
@@ -773,6 +773,8 @@ functionality:
 platform:
   type: "nextflow"
   id: "nextflow"
+  registry: "ghcr.io"
+  organization: "viash-io/civ6_pipeline"
   namespace_separator: "_"
   publish: true
   separate_multiple_outputs: true
@@ -784,5 +786,5 @@ info:
   output: "target/nextflow/civ6_save_renderer/combine_plots"
   executable: "target/nextflow/civ6_save_renderer/combine_plots/combine_plots"
   viash_version: "0.5.10.1"
-  git_commit: "8e25ca77f7d48997ab5c59f7d6d01cbed4040a97"
+  git_commit: "c20da56b02a692af90001495711eb1f363f38d78"
   git_remote: "https://github.com/viash-io/civ6_pipeline"

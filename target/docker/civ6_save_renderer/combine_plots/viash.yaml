@@ -410,8 +410,9 @@ functionality:
         cat << 'VIASHDOCKER'
       FROM jrottenberg/ffmpeg:latest
       
-      RUN :
       LABEL org.opencontainers.image.description="Companion container for running component civ6_save_renderer combine_plots"
+      LABEL org.opencontainers.image.source="https://github.com/viash-io/civ6_pipeline"
+      RUN :
       VIASHDOCKER
       }
       
@@ -645,13 +646,13 @@ functionality:
       
       ViashDockerInstallationCheck
       if [ $VIASH_MODE == "docker_setup" ]; then
-        ViashDockerSetup 'civ6_save_renderer_combine_plots:main_build' "$VIASH_DOCKER_SETUP_STRATEGY"
+        ViashDockerSetup 'ghcr.io/viash-io/civ6_pipeline/civ6_save_renderer_combine_plots:main_build' "$VIASH_DOCKER_SETUP_STRATEGY"
         exit 0
       fi
-      ViashDockerSetup 'civ6_save_renderer_combine_plots:main_build' ifneedbepullelsecachedbuild
+      ViashDockerSetup 'ghcr.io/viash-io/civ6_pipeline/civ6_save_renderer_combine_plots:main_build' ifneedbepullelsecachedbuild
       if [ $VIASH_MODE == "docker_debug" ]; then
-        ViashNotice "+ docker run --entrypoint=bash -i --rm -v "$(pwd)":/pwd --workdir /pwd -t 'civ6_save_renderer_combine_plots:main_build'"
-        docker run --entrypoint=bash -i --rm -v "$(pwd)":/pwd --workdir /pwd -t 'civ6_save_renderer_combine_plots:main_build'
+        ViashNotice "+ docker run --entrypoint=bash -i --rm -v "$(pwd)":/pwd --workdir /pwd -t 'ghcr.io/viash-io/civ6_pipeline/civ6_save_renderer_combine_plots:main_build'"
+        docker run --entrypoint=bash -i --rm -v "$(pwd)":/pwd --workdir /pwd -t 'ghcr.io/viash-io/civ6_pipeline/civ6_save_renderer_combine_plots:main_build'
         exit 0
       fi
       
@@ -715,13 +716,13 @@ functionality:
       function ViashPerformChown {
         
         if [ ! -z "$VIASH_PAR_OUTPUT" ]; then
-          eval docker run --entrypoint=chown -i --rm $VIASH_EXTRA_MOUNTS civ6_save_renderer_combine_plots:main_build "$(id -u):$(id -g)" --silent --recursive "$VIASH_PAR_OUTPUT"
+          eval docker run --entrypoint=chown -i --rm $VIASH_EXTRA_MOUNTS ghcr.io/viash-io/civ6_pipeline/civ6_save_renderer_combine_plots:main_build "$(id -u):$(id -g)" --silent --recursive "$VIASH_PAR_OUTPUT"
         fi
       }
       trap ViashPerformChown EXIT
       
       
-      cat << VIASHEOF | eval docker run --entrypoint=bash -i --rm $VIASH_EXTRA_MOUNTS civ6_save_renderer_combine_plots:main_build
+      cat << VIASHEOF | eval docker run --entrypoint=bash -i --rm $VIASH_EXTRA_MOUNTS ghcr.io/viash-io/civ6_pipeline/civ6_save_renderer_combine_plots:main_build
       set -e
       tempscript=\$(mktemp "$VIASH_TEMP/viash-run-combine_plots-XXXXXX")
       function clean_up {
@@ -767,6 +768,8 @@ platform:
   type: "docker"
   id: "docker"
   image: "jrottenberg/ffmpeg"
+  target_organization: "viash-io/civ6_pipeline"
+  target_registry: "ghcr.io"
   namespace_separator: "_"
   resolve_volume: "Automatic"
   chown: true
@@ -774,6 +777,7 @@ platform:
   setup_strategy: "ifneedbepullelsecachedbuild"
   privileged: false
   run_args: []
+  target_image_source: "https://github.com/viash-io/civ6_pipeline"
   setup: []
 platforms: []
 info:
@@ -782,5 +786,5 @@ info:
   output: "target/docker/civ6_save_renderer/combine_plots"
   executable: "target/docker/civ6_save_renderer/combine_plots/combine_plots"
   viash_version: "0.5.10.1"
-  git_commit: "8e25ca77f7d48997ab5c59f7d6d01cbed4040a97"
+  git_commit: "c20da56b02a692af90001495711eb1f363f38d78"
   git_remote: "https://github.com/viash-io/civ6_pipeline"

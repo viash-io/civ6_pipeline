@@ -1,16 +1,16 @@
            namespace        functionality             platform            test_name exit_code duration               result[0m
   civ6_save_renderer         convert_plot               docker                start                                        [0m
   civ6_save_renderer         parse_header               docker                start                                        [0m
-[32m  civ6_save_renderer         parse_header               docker     build_executable         0        0              SUCCESS[0m
 [32m  civ6_save_renderer         convert_plot               docker     build_executable         0        0              SUCCESS[0m
-[33m  civ6_save_renderer         parse_header               docker                tests        -1        0              MISSING[0m
 [33m  civ6_save_renderer         convert_plot               docker                tests        -1        0              MISSING[0m
-  civ6_save_renderer            parse_map               docker                start                                        [0m
   civ6_save_renderer        combine_plots               docker                start                                        [0m
+[32m  civ6_save_renderer         parse_header               docker     build_executable         0        0              SUCCESS[0m
+[33m  civ6_save_renderer         parse_header               docker                tests        -1        0              MISSING[0m
+  civ6_save_renderer            parse_map               docker                start                                        [0m
+[32m  civ6_save_renderer        combine_plots               docker     build_executable         0        0              SUCCESS[0m
+[33m  civ6_save_renderer        combine_plots               docker                tests        -1        0              MISSING[0m
 [32m  civ6_save_renderer            parse_map               docker     build_executable         0        0              SUCCESS[0m
 [33m  civ6_save_renderer            parse_map               docker                tests        -1        0              MISSING[0m
   civ6_save_renderer             plot_map               docker                start                                        [0m
-[32m  civ6_save_renderer        combine_plots               docker     build_executable         0        0              SUCCESS[0m
-[33m  civ6_save_renderer        combine_plots               docker                tests        -1        0              MISSING[0m
 [32m  civ6_save_renderer             plot_map               docker     build_executable         0        0              SUCCESS[0m
 [33m  civ6_save_renderer             plot_map               docker                tests        -1        0              MISSING[0m
