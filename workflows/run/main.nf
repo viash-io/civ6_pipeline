@@ -8,6 +8,7 @@ include  { combine_plots } from  targetDir + '/civ6_save_renderer/combine_plots/
 include  { convert_plot }  from  targetDir + '/civ6_save_renderer/convert_plot/main.nf'   params(params)
 include  { parse_header }  from  targetDir + '/civ6_save_renderer/parse_header/main.nf'   params(params)
 include  { parse_map }     from  targetDir + '/civ6_save_renderer/parse_map/main.nf'      params(params)
+include  { rename }        from  workflowDir + '/utils.nf'
 
 workflow {
 
