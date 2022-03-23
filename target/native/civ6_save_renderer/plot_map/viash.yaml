@@ -397,5 +397,5 @@ info:
   output: "target/native/civ6_save_renderer/plot_map"
   executable: "target/native/civ6_save_renderer/plot_map/plot_map"
   viash_version: "0.5.10.1"
-  git_commit: "c20da56b02a692af90001495711eb1f363f38d78"
+  git_commit: "c3f87f2eb5766011d3c562d69385745a554ce119"
   git_remote: "https://github.com/viash-io/civ6_pipeline"
