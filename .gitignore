@@ -1,4 +1,5 @@
 work
 .nextflow*
 output
-target/
+target
+.viash*
