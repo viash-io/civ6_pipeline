@@ -1,7 +1,7 @@
 nextflow.enable.dsl=2
 
-workflowDir = "${params.rootDir}/workflows"
-targetDir = "${params.rootDir}/target/nextflow"
+workflowDir = params.rootDir + "/workflows"
+targetDir = params.rootDir + "/target/nextflow"
 
 include  { plot_map }      from  targetDir + '/civ6_save_renderer/plot_map/main.nf'       params(params)
 include  { combine_plots } from  targetDir + '/civ6_save_renderer/combine_plots/main.nf'  params(params)
@@ -28,12 +28,12 @@ workflow {
         | map{ it -> [ it.baseName , it, params ] }
         | ( parse_header & parse_map )
         | join
-        | map{ id, parse_headerOut, params1, parse_mapOut, params2 ->
-            [ id, [ "yaml" : parse_headerOut, "tsv": parse_mapOut ], params1 ] }
+        | map{ id, data_parse_header, params1, data_parse_map, params2 ->
+            [ id, [ "yaml" : data_parse_header, "tsv": data_parse_map ], params1 ] }
         | plot_map
         | convert_plot
         | toSortedList{ a,b -> a[0] <=> b[0] }
-        | map( listToTriplet )
+        | map{ tuples -> [ "final", tuples.collect{it[1]}, params ] }
         | combine_plots
 
 }
