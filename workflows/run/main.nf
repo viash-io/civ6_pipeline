@@ -8,7 +8,6 @@ include  { combine_plots } from  targetDir + '/civ6_save_renderer/combine_plots/
 include  { convert_plot }  from  targetDir + '/civ6_save_renderer/convert_plot/main.nf'   params(params)
 include  { parse_header }  from  targetDir + '/civ6_save_renderer/parse_header/main.nf'   params(params)
 include  { parse_map }     from  targetDir + '/civ6_save_renderer/parse_map/main.nf'      params(params)
-include  { rename }        from  workflowDir + '/utils.nf'
 
 workflow {
 
@@ -21,8 +20,6 @@ workflow {
     if (!params.containsKey("publishDir") || !params.publishDir || params.publishDir == "") {
         exit 1, "ERROR: Please provide a --publishDir parameter pointing to the directory to store output"
     }
-
-    def listToTriplet = { it -> [ "", it.collect{ a -> a[1] }, params ] }
 
     Channel.fromPath(params.input, checkIfExists: false)
         | map{ it -> [ it.baseName , it, params ] }
