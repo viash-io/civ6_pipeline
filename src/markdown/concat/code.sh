@@ -1,5 +1,5 @@
 #!/bin/bash
 
 inputfiles="$(echo $par_input | tr ':' ' ')"
-
-pandoc $inputfiles -t markdown >> $par_output
+echo $par_header > headerfile.md
+pandoc headerfile.md $inputfiles -t markdown >> $par_output

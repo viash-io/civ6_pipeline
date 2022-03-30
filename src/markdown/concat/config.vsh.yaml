@@ -9,6 +9,10 @@ functionality:
       required: true
       example: "file.md"
       multiple: true
+    - name: "--header"
+      type: string
+      required: false
+      example: "# Title"
     - name: "--output"
       type: file
       description: "Output file"

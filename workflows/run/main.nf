@@ -11,6 +11,7 @@ include  { parse_map }     from  targetDir + '/civ6_save_renderer/parse_map/main
 include  { filterOutput }  from  targetDir + '/civ6_save_renderer/parse_header/main.nf'   params(params)
 include  { filterLog as headerLog }  from  targetDir + '/civ6_save_renderer/parse_header/main.nf'   params(params)
 include  { concat } from targetDir + '/markdown/concat/main.nf' params(params)
+include  { overrideOptionValue } from workflowDir + "/utils.nf"
 
 workflow {
 
@@ -45,6 +46,7 @@ workflow {
         | map{ it[1] }
         | toSortedList
         | map{ [ "all", it, params ] }
+        | map { overrideOptionValue(it, "concat", "header", "# Header for this report") }
         | concat
 
 }
