@@ -45,7 +45,7 @@ workflow {
         | headerLog
         | map{ it[1] }
         | toSortedList
-        | map{ [ "all", it, params ] }
+        | map{ [ "doc", it, params ] }
         | map { overrideOptionValue(it, "concat", "header", "# Header for this report") }
         | concat
 
