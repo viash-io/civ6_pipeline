@@ -17,6 +17,11 @@ functionality:
       example: "output.yaml"
       direction: output
       description: "Path to store the output YAML at."
+    - name: "--log"
+      alternatives: [-l]
+      type: file
+      example: "log.md"
+      direction: output
   resources:
     - type: bash_script
       path: script.sh

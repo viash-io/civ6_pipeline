@@ -1,0 +1,26 @@
+functionality:
+  name: concat
+  namespace: markdown
+  description: Concatenate markdown files using Pandoc
+  arguments:
+    - name: "--input"
+      type: file
+      description: "Input files"
+      required: true
+      example: "file.md"
+      multiple: true
+    - name: "--output"
+      type: file
+      description: "Output file"
+      required: true
+      example: output.md
+      direction: output
+  resources:
+    - type: bash_script
+      path: ./code.sh
+platforms:
+  - type: docker
+    image: pandoc/latex
+    apk:
+      packages: bash
+  - type: nextflow
