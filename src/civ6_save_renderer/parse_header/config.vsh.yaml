@@ -20,7 +20,7 @@ functionality:
     - name: "--log"
       alternatives: [-l]
       type: file
-      example: "log.md"
+      default: "log.md"
       direction: output
   resources:
     - type: bash_script

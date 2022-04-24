@@ -17,6 +17,12 @@ functionality:
       example: "output.png"
       direction: output
       description: "Output path."
+    - name: "--log"
+      type: file
+      required: true
+      direction: output
+      description: "Output log"
+      example: sample.md
   resources:
     - type: bash_script
       path: script.sh

@@ -1,0 +1,28 @@
+functionality:
+  name: aggregate
+  namespace: utils
+  version: 0.0.1
+  description: Aggregate artifacts from different streams and collect them in one directory
+  arguments:
+  - name: --input
+    type: file
+    required: true
+    multiple: true
+    direction: input
+    description: Input
+  - name: --docs
+    type: file
+    required: true
+    direction: output
+  resources:
+  - type: bash_script
+    path: ./code.sh
+  # tests:
+  # - type: bash_script
+  #   path: test/test_publish.sh
+platforms:
+- type: docker
+  image: ubuntu
+- type: nextflow
+  publish: false
+  per_id: false

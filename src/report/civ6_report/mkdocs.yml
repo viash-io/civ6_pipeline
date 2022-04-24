@@ -1,0 +1,19 @@
+site_name: Civ6 Report
+
+nav:
+  - Introduction: index.md
+  - Parse Header:
+    - parse_header.md
+    - ... | flat | parse_header/*.md
+  - Convert Plot:
+    - convert_plot.md
+    - ... | flat | convert_plot/*.md
+  - Conclusion: conclusion.md
+
+# theme: material
+
+plugins:
+  - search
+  - awesome-pages:
+      collapse_single_pages: true
+  - with-pdf

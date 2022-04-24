@@ -1,0 +1,28 @@
+functionality:
+  name: publish
+  namespace: utils
+  version: 0.0.1
+  description: Publish an artifact and optionally rename with parameters
+  arguments:
+  - name: --input
+    type: file
+    required: true
+    multiple: true
+    direction: input
+    description: Input
+  - name: --output
+    type: file
+    required: true
+    direction: output
+  resources:
+  - type: bash_script
+    path: ./code.sh
+  tests:
+  - type: bash_script
+    path: test/test_publish.sh
+platforms:
+- type: docker
+  image: ubuntu
+- type: nextflow
+  publish: true
+  per_id: false

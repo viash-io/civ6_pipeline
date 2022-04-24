@@ -1,0 +1,42 @@
+functionality:
+  name: civ6_report
+  namespace: report
+  description: Consolidate and generate final report/site
+  arguments:
+    - name: "--input"
+      type: file
+      description: "Input directory"
+      required: true
+      example: "docs/"
+    - name: "--report"
+      type: file
+      description: "Output directory"
+      required: true
+      example: "report"
+      direction: output
+  resources:
+    - type: bash_script
+      path: ./code.sh
+    - type: file
+      path: mkdocs.yml
+    - type: file
+      path: docs
+platforms:
+  - type: docker
+    image: squidfunk/mkdocs-material
+    setup:
+      - type: apk
+        packages:
+          - bash
+          - build-base
+          - libc-dev
+          - python3-dev
+          - gpgme-dev
+          - pango
+      - type: python
+        packages:
+          - mkdocs-awesome-pages-plugin
+          - mkdocs-with-pdf
+  - type: nextflow
+    publish: true
+    per_id: false
