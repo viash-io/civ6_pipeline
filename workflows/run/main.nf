@@ -27,7 +27,7 @@ workflow {
         | join
         | map{ id, data_parse_header, params1, data_parse_map, params2 ->
             [ id, [ "yaml" : data_parse_header, "tsv": data_parse_map ], params1 ] }
-        | plot_map
+        | plot_map( debug: true )
         | convert_plot
         | toSortedList{ a,b -> a[0] <=> b[0] }
         | map{ tuples -> [ "final", tuples.collect{it[1]}, params ] }
