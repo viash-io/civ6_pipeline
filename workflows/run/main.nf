@@ -31,6 +31,7 @@ workflow {
         | convert_plot
         | toSortedList{ a,b -> a[0] <=> b[0] }
         | combine_plots.run(
-            map: { tuples -> [ "final", [ input: tuples.collect{it[1] } ] ] } )
+            directives: [ publishDir: [ path: params.publishDir ] ],
+            map: { tuples -> [ "final", [ input: tuples.collect{it[1] }, output: "final.webm" ] ] } )
 
 }
