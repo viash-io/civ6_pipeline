@@ -22,15 +22,15 @@ workflow {
     }
 
     Channel.fromPath(params.input, checkIfExists: false)
-        | map{ it -> [ it.baseName , it, params ] }
+        | map{ it -> [ it.baseName , [ input: it ] ] }
         | ( parse_header & parse_map )
         | join
-        | map{ id, data_parse_header, params1, data_parse_map, params2 ->
-            [ id, [ "yaml" : data_parse_header, "tsv": data_parse_map ], params1 ] }
-        | plot_map( debug: true )
+        | plot_map.run(
+            map: { id, data_parse_header, data_parse_map ->
+                [ id, [ "yaml" : data_parse_header, "tsv": data_parse_map ] ] } )
         | convert_plot
         | toSortedList{ a,b -> a[0] <=> b[0] }
-        | map{ tuples -> [ "final", tuples.collect{it[1]}, params ] }
-        | combine_plots
+        | combine_plots.run(
+            map: { tuples -> [ "final", [ input: tuples.collect{it[1] } ] ] } )
 
 }

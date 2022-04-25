@@ -1,7 +1,7 @@
 library(tidyverse)
 library(cowplot)
 
-source(paste0(resources_dir, "/helper.R"))
+source(paste0("plot_map/helper.R"))
 
 # par <- list(
 #   yaml = "/home/rcannood/workspace/di/viash_workshop_1/data.yaml",

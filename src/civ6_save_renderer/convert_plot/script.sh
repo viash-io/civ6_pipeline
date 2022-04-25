@@ -1,3 +1,3 @@
 #!/bin/bash
 
-convert "$par_input" -flatten "$par_output"
+convert_plot/convert_plot "$par_input" -flatten "$par_output"
