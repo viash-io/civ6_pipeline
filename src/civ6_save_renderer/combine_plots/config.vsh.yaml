@@ -31,6 +31,4 @@ platforms:
     image: jrottenberg/ffmpeg
   - type: nextflow
     variant: neo
-    directives:
-      container: civ6_save_renderer_combine_plots:latest
   - type: native

@@ -31,7 +31,6 @@ functionality:
 platforms:
   - type: docker
     image: rocker/tidyverse
-    target_image: civ6_plot_map
     r:
       cran:
         - ggforce
@@ -43,6 +42,4 @@ platforms:
         - rcannood/civ6saves
   - type: nextflow
     variant: neo
-    directives:
-      container: civ6_plot_map
   - type: native

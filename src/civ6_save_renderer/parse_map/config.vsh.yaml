@@ -26,6 +26,4 @@ platforms:
     image: node
   - type: nextflow
     variant: neo
-    directives:
-      container: "civ6_save_renderer_parse_map:latest"
   - type: native

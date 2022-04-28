@@ -28,6 +28,4 @@ platforms:
         - cd /home/node && npm install civ6-save-parser
   - type: nextflow
     variant: neo
-    directives:
-      container: "civ6_save_renderer_parse_header:latest"
   - type: native
