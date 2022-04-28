@@ -1,6 +1,6 @@
 // read helper libraries & functions
 const fs = require("fs");
-const helper = require("./parse_map/helper.js");
+const helper = require("./" + meta["resources_dir"] + "/helper.js");
 
 // read data from file
 const json = helper.savetomap(fs.readFileSync(par["input"]));
