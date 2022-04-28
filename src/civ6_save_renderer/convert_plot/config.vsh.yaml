@@ -28,6 +28,4 @@ platforms:
         packages: [ "procps" ]
   - type: nextflow
     variant: neo
-    directives:
-      container: civ6_save_renderer_convert_plot:latest
   - type: native
