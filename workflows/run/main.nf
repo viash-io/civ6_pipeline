@@ -25,13 +25,13 @@ workflow {
         | map{ it -> [ it.baseName , [ input: it ] ] }
         | ( parse_header & parse_map )
         | join
-        | plot_map.run(
-            map: { id, data_parse_header, data_parse_map ->
-                [ id, [ "yaml" : data_parse_header, "tsv": data_parse_map ] ] } )
+        | map { id, data_parse_header, data_parse_map ->
+                [ id, [ "yaml" : data_parse_header, "tsv": data_parse_map ] ] }
+        | plot_map
         | convert_plot
         | toSortedList{ a,b -> a[0] <=> b[0] }
+        | map { tuples -> [ "final", [ input: tuples.collect{it[1] }, output: "final.webm" ] ] }
         | combine_plots.run(
-            directives: [ publishDir: [ path: params.publishDir ] ],
-            map: { tuples -> [ "final", [ input: tuples.collect{it[1] }, output: "final.webm" ] ] } )
+            directives: [ publishDir: [ path: params.publishDir ] ])
 
 }
