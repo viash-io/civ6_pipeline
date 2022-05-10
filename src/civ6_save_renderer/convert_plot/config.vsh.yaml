@@ -27,5 +27,4 @@ platforms:
       - type: apt
         packages: [ "procps" ]
   - type: nextflow
-    variant: neo
   - type: native

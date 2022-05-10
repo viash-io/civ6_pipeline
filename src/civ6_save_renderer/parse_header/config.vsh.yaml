@@ -27,5 +27,4 @@ platforms:
       run:
         - cd /home/node && npm install civ6-save-parser
   - type: nextflow
-    variant: neo
   - type: native

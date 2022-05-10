@@ -30,5 +30,4 @@ platforms:
   - type: docker
     image: jrottenberg/ffmpeg
   - type: nextflow
-    variant: neo
   - type: native

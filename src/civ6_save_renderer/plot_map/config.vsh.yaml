@@ -41,5 +41,4 @@ platforms:
       github:
         - rcannood/civ6saves
   - type: nextflow
-    variant: neo
   - type: native
