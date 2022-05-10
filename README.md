@@ -15,6 +15,11 @@ This is a toy dataset which uses savefiles from a game called
 Civilization VI and generates a post-game video of the in-game tile
 ownership over time.
 
+You can see the general workflow for generating a postgame replay video
+in the diagram below.
+
+![](docs/images/workflow.png)
+
 ## Run a release build of the pipeline
 
 ``` sh
@@ -92,8 +97,3 @@ in time. Since the information that we need is stored in a format, we
 need scripts to: 1. extract the information from the binary format (in
 JavaScript), 2. generate a map visualisation (in R), 3. convert all the
 visualisations into a video (with ImageMagick and ffmpeg).
-
-You can see the general workflow for generating a postgame replay video
-in the diagram below.
-
-![](docs/images/workflow.png)
