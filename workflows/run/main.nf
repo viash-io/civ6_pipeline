@@ -9,9 +9,10 @@ include { parse_header } from targetDir + '/civ6_save_renderer/parse_header/main
 include { parse_map } from targetDir + '/civ6_save_renderer/parse_map/main.nf'
 
 workflow {
-    if (params.debug == true) {
+
+    if (params.debug == true)
         println(params)
-    }
+
     if (!params.containsKey("input") || !params.input || params.input == "") {
         exit 1, "ERROR: Please provide a --input parameter pointing to .Civ6Save file(s)"
     }
@@ -28,7 +29,7 @@ workflow {
         | plot_map
         | convert_plot
         | toSortedList{ a,b -> a[0] <=> b[0] }
-        | map { tuples -> [ "final", [ input: tuples.collect{it[1] }, output: "final.webm" ] ] }
+        | map { tuples -> [ "final", [ input: tuples.collect{ it[1] }, output: "final.webm" ] ] }
         | combine_plots.run(
             auto: [ publish: true ]
         )
