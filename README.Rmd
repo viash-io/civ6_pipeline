@@ -68,7 +68,7 @@ Civilization is a series of six video strategy games where players oversee the d
 
 ### Post-game replay map
 Multiplayer games can take a few hours to finish -- anywhere between 2 to 10 hours, depending on who you're playing with. 
-That's why a perfect way of closing a session of Civilization V is by being able to watch a 'postgame map replay' of which owner owned which time at any given point in time.
+That's why a perfect way of closing a session of Civilization V is by being able to watch a 'postgame map replay' of which owner owned which tile at any given point in time.
 
 [![](docs/images/civ5_victory_.png)](docs/images/civ5_victory_.webm)
 
