@@ -7,6 +7,7 @@ include { combine_plots } from targetDir + '/civ6_save_renderer/combine_plots/ma
 include { convert_plot } from targetDir + '/civ6_save_renderer/convert_plot/main.nf'
 include { parse_header } from targetDir + '/civ6_save_renderer/parse_header/main.nf'
 include { parse_map } from targetDir + '/civ6_save_renderer/parse_map/main.nf'
+include { aggregate } from targetDir + '/utils/aggregate/main.nf'
 
 workflow {
 
@@ -25,9 +26,10 @@ workflow {
         | ( parse_header & parse_map )
         | join
         | map { id, header, map ->
-                [ id, [ "yaml" : header, "tsv": map ] ] }
+                [ id, [ "yaml" : header.output, "tsv": map ] ] }    // pick out the .output part
         | plot_map
-        | convert_plot | convert_plot_output
+        | convert_plot
+        | map{ it -> [ it[0], it[1].output ] }                      // idem
         | toSortedList{ a,b -> a[0] <=> b[0] }
         | map { tuples -> [ "final", [ input: tuples.collect{ it[1] }, output: "final.webm" ] ] }
         | combine_plots.run(
@@ -36,29 +38,32 @@ workflow {
 
     // Report generation
 
-    /* parse_header.out */
-    /*     | parse_header_log */
-    /*     | toSortedList{ a,b -> a[1] <=> b[1] } */
-    /*     | map { [ "", it.collect{it[1]}, params ] } */
-    /*     | map { overrideOptionValue( it, "aggregate", "docs", "/parse_header" ) } */
-    /*     | aggregate1 */
+    parse_header.out
+        | toSortedList{ a,b -> a[0] <=> b[0] }
+        | map { [ "", it.collect{ it[1].log } ] }
+        | aggregate.run(                                          // no separate include required !
+            key: 'aggregate1',
+            mapData: { it -> [ input: it, docs: "parse_header_docs" ] },
+        )
 
-    /* convert_plot.out */
-    /*     | convert_plot_log */
-    /*     | toSortedList{ a,b -> a[1] <=> b[1] } */
-    /*     | map { [ "", it.collect{it[1]}, params ] } */
-    /*     | map { overrideOptionValue( it, "aggregate", "docs", "/convert_plot" ) } */
-    /*     | aggregate2 */
+    convert_plot.out
+        | toSortedList{ a,b -> a[0] <=> b[0] }
+        | map { [ "", it.collect{ it[1].log } ] }
+        | aggregate.run (                                          // no separate include required !
+            key: 'aggregate2',
+            mapData: { it -> [ input: it, docs: "convert_plot_docs" ] },
+        )
 
-    /* aggregate1.out */
-    /*     | mix(aggregate2.out) */
-    /*     | toSortedList { a,b -> a[1] <=> b[1] } */
-    /*     | map { [ "", it.collect{it[1]}, params ] } */
-    /*     | map { overrideOptionValue( it, "aggregate", "docs", "/" ) } */
-    /*     | aggregate3 */
+    aggregate1.out
+        | mix(aggregate2.out)
+        | toSortedList { a,b -> a[1] <=> b[1] }
+        | map { [ "", it.collect{ it[1] } ] }
+        | aggregate.run (                                          // no separate include required !
+            key: 'aggregate3',
+            mapData: { it -> [ input: it, docs: "docs" ] },
+            auto: [ publish: true ]
+        )
 
-    /* aggregate3.out */
-    /*     | map { overrideOptionValue( it, "civ6_report", "report", "_full" ) } */
     /*     | civ6_report */
 
 }

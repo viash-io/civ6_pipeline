@@ -24,5 +24,3 @@ platforms:
 - type: docker
   image: ubuntu
 - type: nextflow
-  publish: false
-  per_id: false

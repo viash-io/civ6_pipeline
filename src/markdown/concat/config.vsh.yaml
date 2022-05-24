@@ -28,4 +28,3 @@ platforms:
     apk:
       packages: bash
   - type: nextflow
-    publish: true

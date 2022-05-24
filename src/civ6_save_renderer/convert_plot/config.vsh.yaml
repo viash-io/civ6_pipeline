@@ -33,4 +33,6 @@ platforms:
       - type: apt
         packages: [ "procps" ]
   - type: nextflow
+    auto:
+      simplifyOutput: false
   - type: native
