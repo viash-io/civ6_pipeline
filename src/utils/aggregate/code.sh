@@ -1,7 +1,10 @@
 #!/bin/bash
 
 mkdir -p "$par_docs"
+mkdir -p "$par_docs/resources"
+
 inputfiles=$(echo "$par_input" | tr ":" "\n")
+resourcedirs=$(echo "$par_resources" | tr ":" "\n")
 
 for f in $inputfiles; do
   echo "Copying $f to $par_docs"
@@ -12,3 +15,7 @@ for f in $inputfiles; do
   fi
 done
 
+for d in $resourcedirs; do
+  echo "Copying $d/* to $par_docs/resources"
+  cp -r $d/* $par_docs/resources/
+done

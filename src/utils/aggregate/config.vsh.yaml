@@ -10,6 +10,12 @@ functionality:
     multiple: true
     direction: input
     description: Input
+  - name: --resources
+    type: file
+    required: true
+    multiple: true
+    direction: input
+    description: Input
   - name: --docs
     type: file
     required: true

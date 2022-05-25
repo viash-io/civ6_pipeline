@@ -5,6 +5,7 @@ targetDir = params.rootDir + "/target/nextflow"
 include { plot_map } from targetDir + '/civ6_save_renderer/plot_map/main.nf'
 include { combine_plots } from targetDir + '/civ6_save_renderer/combine_plots/main.nf'
 include { convert_plot } from targetDir + '/civ6_save_renderer/convert_plot/main.nf'
+include { convert_plot_qc } from targetDir + '/civ6_save_renderer/convert_plot_qc/main.nf'
 include { parse_header } from targetDir + '/civ6_save_renderer/parse_header/main.nf'
 include { parse_map } from targetDir + '/civ6_save_renderer/parse_map/main.nf'
 include { aggregate } from targetDir + '/utils/aggregate/main.nf'
@@ -29,6 +30,7 @@ workflow {
                 [ id, [ "yaml" : header.output, "tsv": map ] ] }    // pick out the .output part
         | plot_map
         | convert_plot
+        | convert_plot_qc
         | map{ it -> [ it[0], it[1].output ] }                      // idem
         | toSortedList{ a,b -> a[0] <=> b[0] }
         | map { tuples -> [ "final", [ input: tuples.collect{ it[1] }, output: "final.webm" ] ] }
@@ -43,15 +45,15 @@ workflow {
         | map { [ "", it.collect{ it[1].log } ] }
         | aggregate.run(                                          // no separate include required !
             key: 'aggregate1',
-            mapData: { it -> [ input: it, docs: "parse_header_docs" ] },
+            mapData: { it -> [ input: it, resources: [], docs: "parse_header_docs" ] },
         )
 
-    convert_plot.out
+    convert_plot_qc.out
         | toSortedList{ a,b -> a[0] <=> b[0] }
-        | map { [ "", it.collect{ it[1].log } ] }
+        | map { [ "", [ input: it.collect{ it[1].log }, resources: it.collect{ it[1].resources } ] ] }
         | aggregate.run (                                          // no separate include required !
             key: 'aggregate2',
-            mapData: { it -> [ input: it, docs: "convert_plot_docs" ] },
+            mapData: { it -> [ input: it.input, resources: it.resources, docs: "convert_plot_docs" ] },
         )
 
     aggregate1.out
@@ -60,7 +62,7 @@ workflow {
         | map { [ "", it.collect{ it[1] } ] }
         | aggregate.run (                                          // no separate include required !
             key: 'aggregate3',
-            mapData: { it -> [ input: it, docs: "docs" ] },
+            mapData: { it -> [ input: it, resources: [], docs: "docs" ] },
             auto: [ publish: true ]
         )
 
