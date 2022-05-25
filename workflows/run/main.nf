@@ -24,13 +24,18 @@ workflow {
 
     Channel.fromPath(params.input, checkIfExists: false)
         | map{ it -> [ it.baseName , [ input: it ] ] }
+        // parse_header generates a log file during processing
         | ( parse_header & parse_map )
         | join
         | map { id, header, map ->
                 [ id, [ "yaml" : header.output, "tsv": map ] ] }    // pick out the .output part
         | plot_map
         | convert_plot
+        // An example of a dedicated reporting module/step: convert_plot_qc
+        // We add the original input png file as an output again in order
+        // to plug it in the pipeline logic as as.
         | convert_plot_qc
+        // Use the .output part, omit report arguments
         | map{ it -> [ it[0], it[1].output ] }                      // idem
         | toSortedList{ a,b -> a[0] <=> b[0] }
         | map { tuples -> [ "final", [ input: tuples.collect{ it[1] }, output: "final.webm" ] ] }
@@ -43,6 +48,7 @@ workflow {
     parse_header.out
         | toSortedList{ a,b -> a[0] <=> b[0] }
         | map { [ "", it.collect{ it[1].log } ] }
+        // Add an empty resources list because no resources are necessary for report
         | aggregate.run(                                          // no separate include required !
             key: 'aggregate1',
             mapData: { it -> [ input: it, resources: [], docs: "parse_header_docs" ] },
@@ -60,6 +66,7 @@ workflow {
         | mix(aggregate2.out)
         | toSortedList { a,b -> a[1] <=> b[1] }
         | map { [ "", it.collect{ it[1] } ] }
+        // Add an empty resources list because no resources are necessary for report
         | aggregate.run (                                          // no separate include required !
             key: 'aggregate3',
             mapData: { it -> [ input: it, resources: [], docs: "docs" ] },
