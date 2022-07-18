@@ -1,0 +1,42 @@
+functionality:
+  name: convert_plot_qc
+  namespace: civ6_save_renderer
+  description: Generate QC report (.md) for the convert_plot step and pass the file itself as well
+  arguments:
+    - name: "--input"
+      alternatives: [ "-i" ]
+      type: file
+      required: true
+      example: "input.png"
+      must_exist: true
+      description: "A PDF input file."
+    - name: "--output"
+      alternatives: [ "-o" ]
+      type: file
+      required: true
+      example: "output.png"
+      direction: output
+      description: "Output path."
+    - name: "--log"
+      type: file
+      required: true
+      direction: output
+      description: "Output log in markdown format"
+      example: sample.md
+    - name: "--resources"
+      type: file
+      required: true
+      direction: output
+      description: "Resources for markdown log"
+      example: resources
+  resources:
+    - type: bash_script
+      path: script.sh
+platforms:
+  - type: docker
+    image: dpokidov/imagemagick
+    setup:
+      - type: apt
+        packages: [ "procps" ]
+  - type: nextflow
+  - type: native

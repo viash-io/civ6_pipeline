@@ -7,7 +7,9 @@ inputfiles=$(echo "$par_input" | tr ":" "\n")
 resourcedirs=$(echo "$par_resources" | tr ":" "\n")
 
 for f in $inputfiles; do
-  echo "Copying $f to $par_docs"
+  echo "Aggregate $f into $par_docs/all.md"
+  cat $f >> $par_docs/all.md
+  echo "Also copy $f into $par_docs"
   if [ -d $f ]; then
     cp -r "$f" "$par_docs/"
   else

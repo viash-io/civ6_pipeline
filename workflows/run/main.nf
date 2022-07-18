@@ -69,7 +69,7 @@ workflow {
         // Add an empty resources list because no resources are necessary for report
         | aggregate.run (                                          // no separate include required !
             key: 'aggregate3',
-            mapData: { it -> [ input: it, resources: [], docs: "docs" ] },
+            mapData: { it -> [ input: it, resources: [ ], docs: "docs" ] },
             auto: [ publish: true ]
         )
 

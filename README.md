@@ -18,7 +18,7 @@ ownership over time.
 You can see the general workflow for generating a postgame replay video
 in the diagram below.
 
-![](docs/images/workflow.png)
+![Workflow diagram](docs/images/workflow.png)
 
 ## Run a release build of the pipeline
 
@@ -75,7 +75,7 @@ the “One More Turn Syndrome”.
 Multiplayer games can take a few hours to finish – anywhere between 2 to
 10 hours, depending on who you’re playing with. That’s why a perfect way
 of closing a session of Civilization V is by being able to watch a
-‘postgame map replay’ of which owner owned which time at any given point
+‘postgame map replay’ of which owner owned which tile at any given point
 in time.
 
 [![](docs/images/civ5_victory_.png)](docs/images/civ5_victory_.webm)
