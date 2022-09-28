@@ -1907,5 +1907,5 @@ info:
   platform: "nextflow"
   output: "target/nextflow/civ6_save_renderer/combine_plots"
   viash_version: "0.6.0"
-  git_commit: "b9f4ab92987b94969bd2460f5e35f34de2e4b550"
+  git_commit: "19c2a68616454c2a0dce114da1e7ecb98e1be211"
   git_remote: "https://github.com/viash-io/civ6_pipeline"

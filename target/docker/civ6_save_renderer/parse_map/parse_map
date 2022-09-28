@@ -391,9 +391,9 @@ FROM node:latest
 
 RUN :
 LABEL org.opencontainers.image.description="Companion container for running component civ6_save_renderer parse_map"
-LABEL org.opencontainers.image.created="2022-09-28T07:26:12Z"
+LABEL org.opencontainers.image.created="2022-09-28T10:48:08Z"
 LABEL org.opencontainers.image.source="https://github.com/viash-io/civ6_pipeline"
-LABEL org.opencontainers.image.revision="b9f4ab92987b94969bd2460f5e35f34de2e4b550"
+LABEL org.opencontainers.image.revision="19c2a68616454c2a0dce114da1e7ecb98e1be211"
 LABEL org.opencontainers.image.version="main_build"
 VIASHDOCKER
 }

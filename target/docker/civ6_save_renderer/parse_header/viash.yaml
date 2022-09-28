@@ -429,9 +429,9 @@ functionality:
       
       RUN cd /home/node && npm install civ6-save-parser
       LABEL org.opencontainers.image.description="Companion container for running component civ6_save_renderer parse_header"
-      LABEL org.opencontainers.image.created="2022-09-28T07:26:12Z"
+      LABEL org.opencontainers.image.created="2022-09-28T10:48:09Z"
       LABEL org.opencontainers.image.source="https://github.com/viash-io/civ6_pipeline"
-      LABEL org.opencontainers.image.revision="b9f4ab92987b94969bd2460f5e35f34de2e4b550"
+      LABEL org.opencontainers.image.revision="19c2a68616454c2a0dce114da1e7ecb98e1be211"
       LABEL org.opencontainers.image.version="main_build"
       VIASHDOCKER
       }
@@ -874,5 +874,5 @@ info:
   output: "target/docker/civ6_save_renderer/parse_header"
   executable: "target/docker/civ6_save_renderer/parse_header/parse_header"
   viash_version: "0.6.0"
-  git_commit: "b9f4ab92987b94969bd2460f5e35f34de2e4b550"
+  git_commit: "19c2a68616454c2a0dce114da1e7ecb98e1be211"
   git_remote: "https://github.com/viash-io/civ6_pipeline"
