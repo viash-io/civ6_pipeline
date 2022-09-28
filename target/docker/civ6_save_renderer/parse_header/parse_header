@@ -391,9 +391,9 @@ FROM node:latest
 
 RUN cd /home/node && npm install civ6-save-parser
 LABEL org.opencontainers.image.description="Companion container for running component civ6_save_renderer parse_header"
-LABEL org.opencontainers.image.created="2022-09-28T06:55:31Z"
+LABEL org.opencontainers.image.created="2022-09-28T07:26:12Z"
 LABEL org.opencontainers.image.source="https://github.com/viash-io/civ6_pipeline"
-LABEL org.opencontainers.image.revision="4832a16f7e6b678ac4c4931759a1816f63e4283e"
+LABEL org.opencontainers.image.revision="b9f4ab92987b94969bd2460f5e35f34de2e4b550"
 LABEL org.opencontainers.image.version="main_build"
 VIASHDOCKER
 }
