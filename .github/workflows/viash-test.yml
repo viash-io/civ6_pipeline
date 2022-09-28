@@ -40,7 +40,7 @@ jobs:
 
     - name: Run pipeline
       run: |
-        workflows/run/run.sh
+        workflows/civ6_pipeline/run.sh
         # remove output files
         find work -name "*.pdf" -o -name "*.png" -o -name "*.webm" -type f -delete
         # move nextflow logs to check results
