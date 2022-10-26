@@ -22,7 +22,7 @@ functionality:
       path: script.sh
 platforms:
   - type: docker
-    image: dpokidov/imagemagick
+    image: dpokidov/imagemagick:7.1.0-50
     setup:
       - type: apt
         packages: [ "procps" ]

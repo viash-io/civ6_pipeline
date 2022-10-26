@@ -22,9 +22,10 @@ functionality:
       path: script.sh
 platforms:
   - type: docker
-    image: node
-    docker:
-      run:
-        - cd /home/node && npm install civ6-save-parser
+    image: node:15-buster
+    setup:
+      - type: docker
+        run:
+          - cd /home/node && npm install civ6-save-parser
   - type: nextflow
   - type: native

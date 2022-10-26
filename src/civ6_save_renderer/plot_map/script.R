@@ -1,12 +1,18 @@
 library(tidyverse)
 library(cowplot)
 
-source(paste0(meta$resources_dir, "/helper.R"))
+## VIASH START
+par <- list(
+  "yaml" = "header.yaml",
+  "tsv" = "map.tsv",
+  "output" = "output.pdf"
+)
+meta <- list(
+  "resources_dir" = "src/civ6_save_renderer/plot_map"
+)
+## VIASH END
 
-# par <- list(
-#   yaml = "/home/rcannood/workspace/di/viash_workshop_1/data.yaml",
-#   tsv = "/home/rcannood/workspace/di/viash_workshop_1/data.tsv"
-# )
+source(paste0(meta$resources_dir, "/helper.R"))
 
 # read data
 game_data <- read_header(par$yaml)
