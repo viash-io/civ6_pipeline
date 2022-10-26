@@ -28,6 +28,6 @@ functionality:
       path: script.sh
 platforms:
   - type: docker
-    image: jrottenberg/ffmpeg
+    image: jrottenberg/ffmpeg:3.2-ubuntu
   - type: nextflow
   - type: native
