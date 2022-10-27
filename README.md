@@ -31,7 +31,8 @@ nextflow \
   -main-script workflows/civ6_pipeline/main.nf \
   --input "data/*.Civ6Save" \
   --publishDir "output" \
-  -resume
+  -resume \
+  -with-docker
 ```
 
 <!-- todo: use an actual release -->
