@@ -448,9 +448,9 @@ functionality:
       
       RUN :
       LABEL org.opencontainers.image.description="Companion container for running component civ6_save_renderer combine_plots"
-      LABEL org.opencontainers.image.created="2022-10-27T08:23:46Z"
+      LABEL org.opencontainers.image.created="2022-10-27T08:28:29Z"
       LABEL org.opencontainers.image.source="https://github.com/viash-io/civ6_pipeline"
-      LABEL org.opencontainers.image.revision="6057a2f41c59c920a367a0e4001dae8d5a4fda94"
+      LABEL org.opencontainers.image.revision="a59dbf1b7907b672789714d2990748ff5d68857e"
       LABEL org.opencontainers.image.version="main_build"
       VIASHDOCKER
       }
@@ -1057,5 +1057,5 @@ info:
   output: "target/docker/civ6_save_renderer/combine_plots"
   executable: "target/docker/civ6_save_renderer/combine_plots/combine_plots"
   viash_version: "0.6.2"
-  git_commit: "6057a2f41c59c920a367a0e4001dae8d5a4fda94"
+  git_commit: "a59dbf1b7907b672789714d2990748ff5d68857e"
   git_remote: "https://github.com/viash-io/civ6_pipeline"

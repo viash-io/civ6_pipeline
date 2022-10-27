@@ -23,7 +23,7 @@ in the diagram below.
 ## Run a release build of the pipeline
 
 ``` sh
-export NXF_VER=21.04.1
+export NXF_VER=22.04.5
 
 nextflow \
   run https://github.com/viash-io/civ6_pipeline.git \
