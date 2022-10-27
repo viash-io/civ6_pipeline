@@ -617,5 +617,5 @@ info:
   output: "target/native/civ6_save_renderer/combine_plots"
   executable: "target/native/civ6_save_renderer/combine_plots/combine_plots"
   viash_version: "0.6.2"
-  git_commit: "219f7c9e1f4514d1ababab88914936a19f7066e9"
+  git_commit: "04cd61a974fd4b4e40bdb521b675cadbcb0c323c"
   git_remote: "https://github.com/viash-io/civ6_pipeline"
