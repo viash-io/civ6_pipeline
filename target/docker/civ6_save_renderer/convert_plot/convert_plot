@@ -392,9 +392,9 @@ RUN apt-get update && \
   rm -rf /var/lib/apt/lists/*
 
 LABEL org.opencontainers.image.description="Companion container for running component civ6_save_renderer convert_plot"
-LABEL org.opencontainers.image.created="2022-10-27T08:22:36Z"
+LABEL org.opencontainers.image.created="2022-10-27T08:23:47Z"
 LABEL org.opencontainers.image.source="https://github.com/viash-io/civ6_pipeline"
-LABEL org.opencontainers.image.revision="04cd61a974fd4b4e40bdb521b675cadbcb0c323c"
+LABEL org.opencontainers.image.revision="6057a2f41c59c920a367a0e4001dae8d5a4fda94"
 LABEL org.opencontainers.image.version="main_build"
 VIASHDOCKER
 }
