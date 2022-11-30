@@ -397,9 +397,9 @@ RUN Rscript -e 'if (!requireNamespace("remotes", quietly = TRUE)) install.packag
   Rscript -e 'remotes::install_github(c("rcannood/civ6saves"), repos = "https://cran.rstudio.com")'
 
 LABEL org.opencontainers.image.description="Companion container for running component civ6_save_renderer plot_map"
-LABEL org.opencontainers.image.created="2022-10-27T08:28:29Z"
+LABEL org.opencontainers.image.created="2022-11-30T06:07:41Z"
 LABEL org.opencontainers.image.source="https://github.com/viash-io/civ6_pipeline"
-LABEL org.opencontainers.image.revision="a59dbf1b7907b672789714d2990748ff5d68857e"
+LABEL org.opencontainers.image.revision="1b32f073dbcd6afd0607642a2f1c56b101245d3c"
 LABEL org.opencontainers.image.version="main_build"
 VIASHDOCKER
 }
