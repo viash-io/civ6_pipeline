@@ -1,5 +1,5 @@
 
-# Civ6 post-game summary
+# Civ6 post-game summary POC
 
 This is a toy dataset which uses savefiles from a game called
 Civilization VI and generates a post-game video of the in-game tile
@@ -59,6 +59,14 @@ running:
 ``` bash
 workflows/civ6_pipeline/run.sh
 ```
+
+## Known issues
+
+Note that this pipeline may not extend its support beyond the specific
+assets used in [this
+video](https://www.youtube.com/watch?v=wxw3T9589-c). Rendering other
+world leaders, wonders, and additional elements may require further
+development.
 
 ## Background on Civilization
 
