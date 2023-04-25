@@ -54,7 +54,7 @@ Generate the post-game summary movie (stored at `output/output.webm`) by
 running:
 
 ``` bash
-workflows/run/run.sh
+workflows/civ6_pipeline/run.sh
 ```
 
 ## Background on Civilization
