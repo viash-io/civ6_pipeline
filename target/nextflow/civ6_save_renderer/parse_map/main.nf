@@ -115,7 +115,7 @@ thisConfig = processConfig(jsonSlurper.parseText('''{
     "config" : "/home/runner/work/civ6_pipeline/civ6_pipeline/src/civ6_save_renderer/parse_map/config.vsh.yaml",
     "platform" : "nextflow",
     "viash_version" : "0.7.3",
-    "git_commit" : "b536a1f7566ad643e9c75fa7526d9e9ef1f53034",
+    "git_commit" : "e6c384987e3db5b44ed1b2f9c856693ce0b71df0",
     "git_remote" : "https://github.com/viash-io/civ6_pipeline"
   }
 }'''))

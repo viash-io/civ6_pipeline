@@ -395,9 +395,9 @@ FROM jrottenberg/ffmpeg:3.2-ubuntu
 
 RUN :
 LABEL org.opencontainers.image.description="Companion container for running component civ6_save_renderer combine_plots"
-LABEL org.opencontainers.image.created="2023-04-25T08:18:42Z"
+LABEL org.opencontainers.image.created="2023-04-25T09:09:56Z"
 LABEL org.opencontainers.image.source="https://github.com/viash-io/civ6_pipeline"
-LABEL org.opencontainers.image.revision="b536a1f7566ad643e9c75fa7526d9e9ef1f53034"
+LABEL org.opencontainers.image.revision="e6c384987e3db5b44ed1b2f9c856693ce0b71df0"
 LABEL org.opencontainers.image.version="main_build"
 VIASHDOCKER
 }
