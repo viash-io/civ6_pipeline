@@ -1,0 +1,30 @@
+functionality:
+  name: convert_plot
+  namespace: civ6_save_renderer
+  description: Convert a plot from pdf to png.
+  arguments:
+    - name: "--input"
+      alternatives: [ "-i" ]
+      type: file
+      required: true
+      example: "input.pdf"
+      must_exist: true
+      description: "A PDF input file."
+    - name: "--output"
+      alternatives: [ "-o" ]
+      type: file
+      required: true
+      example: "output.png"
+      direction: output
+      description: "Output path."
+  resources:
+    - type: bash_script
+      path: script.sh
+platforms:
+  - type: docker
+    image: dpokidov/imagemagick:7.1.0-50
+    setup:
+      - type: apt
+        packages: [ "procps" ]
+  - type: nextflow
+  - type: native

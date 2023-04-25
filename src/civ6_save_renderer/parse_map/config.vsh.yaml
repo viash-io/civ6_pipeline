@@ -1,0 +1,28 @@
+functionality:
+  name: parse_map
+  namespace: civ6_save_renderer
+  description: "Extract map information from a Civ6 save file as a tsv."
+  arguments:
+    - name: "--input"
+      alternatives: [-i]
+      type: file
+      required: true
+      example: "save.Civ6Save"
+      must_exist: true
+      description: "A Civ6 save file."
+    - name: "--output"
+      alternatives: [-o]
+      type: file
+      required: true
+      example: "output.tsv"
+      direction: output
+      description: "Path to store the output TSV file at."
+  resources:
+    - type: javascript_script
+      path: script.js
+    - path: helper.js
+platforms:
+  - type: docker
+    image: node:15-buster
+  - type: nextflow
+  - type: native

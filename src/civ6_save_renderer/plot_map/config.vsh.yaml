@@ -1,0 +1,45 @@
+functionality:
+  name: plot_map
+  namespace: civ6_save_renderer
+  description: "Use the settings yaml and the map tsv to generate a plot (as PDF)."
+  arguments:
+    - name: "--yaml"
+      alternatives: [-y]
+      type: file
+      required: true
+      example: "header.yaml"
+      must_exist: true
+      description: "A YAML file containing civ6 game settings information."
+    - name: "--tsv"
+      alternatives: [-t]
+      type: file
+      required: true
+      example: "map.tsv"
+      must_exist: true
+      description: "A TSV file containing civ6 map information."
+    - name: "--output"
+      alternatives: [-o]
+      type: file
+      required: true
+      example: "output.pdf"
+      direction: output
+      description: "Path to store the output PDF file at."
+  resources:
+    - type: r_script
+      path: script.R
+    - path: helper.R
+platforms:
+  - type: docker
+    image: rocker/tidyverse:4.2
+    setup: 
+      - type: r
+        cran:
+          - ggforce
+          - yaml
+          - bit64
+          - ggnewscale
+          - cowplot
+        github:
+          - rcannood/civ6saves
+  - type: nextflow
+  - type: native
