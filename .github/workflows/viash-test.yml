@@ -1,54 +1,94 @@
-name: viash test CI
+name: viash test
 
 on:
-  push:
-    branches: [ '*' ]
   pull_request:
-    branches: [ '*' ]
+  push:
+    branches: [ '**' ]
 
 jobs:
-  viash-test:
-    runs-on: ${{ matrix.config.os }}
-    if: "!contains(github.event.head_commit.message, 'ci skip')"
+  run_ci_check_job:
+    runs-on: ubuntu-latest
+    outputs:
+      run_ci: ${{ steps.github_cli.outputs.check }}
+    steps:
+      - name: 'Check if branch has an existing pull request and the trigger was a push'
+        id: github_cli
+        run: |
+          pull_request=$(gh pr list -R ${{ github.repository }} -H ${{ github.ref_name }} --json url --state open --limit 1 | jq '.[0].url')
+          # If the branch has a PR and this run was triggered by a push event, do not run
+          if [[ "$pull_request" != "null" && "$GITHUB_REF_NAME" != "main" && "${{ github.event_name == 'push' }}" == "true" && "${{ !contains(github.event.head_commit.message, 'ci force') }}" == "true" ]]; then
+            echo "check=false" >> $GITHUB_OUTPUT
+          else
+            echo "check=true" >> $GITHUB_OUTPUT
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GTHB_PAT }}
+
+  # phase 1
+  list:
+    needs: run_ci_check_job
+    runs-on: ubuntu-latest
+    if: "needs.run_ci_check_job.outputs.run_ci == 'true'"
+
+    outputs:
+      matrix: ${{ steps.set_matrix.outputs.matrix }}
+      cache_key: ${{ steps.cache.outputs.cache_key }}
+
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0 
+
+    - uses: viash-io/viash-actions/setup@v3
+
+    - name: Get changed files
+      id: changed-files
+      uses: tj-actions/changed-files@v35.8.0
+      with:
+        separator: ";"
+        diff_relative: true
+
+    - id: ns_list
+      uses: viash-io/viash-actions/ns-list@v3
+      with:
+        platform: docker
+        format: json
+
+    - id: ns_list_filtered
+      uses: viash-io/viash-actions/project/detect-changed-components@v3
+      with:
+        input_file: "${{ steps.ns_list.outputs.output_file }}"
+
+    - id: set_matrix
+      run: |
+        echo "matrix=$(jq -c '[ .[] | 
+          { 
+            "name": (.functionality.namespace + "/" + .functionality.name),
+            "config": .info.config
+          }
+        ]' ${{ steps.ns_list_filtered.outputs.output_file }} )" >> $GITHUB_OUTPUT
+
+  # phase 2
+  viash_test:
+    needs: list
+    if: ${{ needs.list.outputs.matrix != '[]' && needs.list.outputs.matrix != '' }}
+    runs-on: ubuntu-latest
 
     strategy:
       fail-fast: false
       matrix:
-        config:
-        - {name: 'main', os: ubuntu-latest }
+        component: ${{ fromJson(needs.list.outputs.matrix) }}
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
-    - name: Fetch viash
+    - uses: viash-io/viash-actions/setup@v3
+
+    - name: Run test
+      timeout-minutes: 30
       run: |
-        bin/init
-        bin/viash -h
-
-    - name: Run build
-      run: |
-        bin/viash_build
-
-    - name: Run tests
-      run: |
-        # create check_results folder
-        sed -i '/^check_results\/$/d' .gitignore
-        mkdir check_results
-
-        # run tests
-        bin/viash_test --append=false --log=check_results/results.tsv
-
-    - name: Run pipeline
-      run: |
-        workflows/civ6_pipeline/run.sh
-        # remove output files
-        find work -name "*.pdf" -o -name "*.png" -o -name "*.webm" -type f -delete
-        # move nextflow logs to check results
-        mv work check_results/nextflow_work
-
-    - name: Upload check results
-      uses: actions/upload-artifact@master
-      with:
-        name: ${{ matrix.config.name }}_results
-        path: check_results
+        VIASH_TEMP=$RUNNER_TEMP/viash viash test \
+          "${{ matrix.component.config }}" \
+          --cpus 2 \
+          --memory "5gb"
 
