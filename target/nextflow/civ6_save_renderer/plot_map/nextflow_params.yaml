@@ -1,0 +1,8 @@
+# Arguments
+yaml: # please fill in - example: "header.yaml"
+tsv: # please fill in - example: "map.tsv"
+# output: "$id.$key.output.pdf"
+
+# Nextflow input-output arguments
+publish_dir: # please fill in - example: "output/"
+# param_list: "my_params.yaml"

@@ -1,0 +1,98 @@
+functionality:
+  name: "plot_map"
+  namespace: "civ6_save_renderer"
+  version: "main_build"
+  arguments:
+  - type: "file"
+    name: "--yaml"
+    alternatives:
+    - "-y"
+    description: "A YAML file containing civ6 game settings information."
+    example:
+    - "header.yaml"
+    must_exist: true
+    create_parent: true
+    required: true
+    direction: "input"
+    multiple: false
+    multiple_sep: ":"
+    dest: "par"
+  - type: "file"
+    name: "--tsv"
+    alternatives:
+    - "-t"
+    description: "A TSV file containing civ6 map information."
+    example:
+    - "map.tsv"
+    must_exist: true
+    create_parent: true
+    required: true
+    direction: "input"
+    multiple: false
+    multiple_sep: ":"
+    dest: "par"
+  - type: "file"
+    name: "--output"
+    alternatives:
+    - "-o"
+    description: "Path to store the output PDF file at."
+    example:
+    - "output.pdf"
+    must_exist: true
+    create_parent: true
+    required: true
+    direction: "output"
+    multiple: false
+    multiple_sep: ":"
+    dest: "par"
+  resources:
+  - type: "r_script"
+    path: "script.R"
+    is_executable: true
+  - type: "file"
+    path: "helper.R"
+  description: "Use the settings yaml and the map tsv to generate a plot (as PDF)."
+  status: "enabled"
+  set_wd_to_resources_dir: false
+platforms:
+- type: "docker"
+  id: "docker"
+  image: "rocker/tidyverse:4.2"
+  target_organization: "viash-io/civ6_pipeline"
+  target_registry: "ghcr.io"
+  namespace_separator: "/"
+  resolve_volume: "Automatic"
+  chown: true
+  setup_strategy: "ifneedbepullelsecachedbuild"
+  target_image_source: "https://github.com/viash-io/civ6_pipeline"
+  setup:
+  - type: "r"
+    cran:
+    - "ggforce"
+    - "yaml"
+    - "bit64"
+    - "ggnewscale"
+    - "cowplot"
+    github:
+    - "rcannood/civ6saves"
+    bioc_force_install: false
+- type: "nextflow"
+  id: "nextflow"
+  variant: "vdsl3"
+  auto:
+    simplifyInput: true
+    simplifyOutput: true
+    transcript: false
+    publish: false
+  debug: false
+  container: "docker"
+- type: "native"
+  id: "native"
+info:
+  config: "/home/runner/work/civ6_pipeline/civ6_pipeline/src/civ6_save_renderer/plot_map/config.vsh.yaml"
+  platform: "docker"
+  output: "/home/runner/work/civ6_pipeline/civ6_pipeline/target/docker/civ6_save_renderer/plot_map"
+  executable: "/home/runner/work/civ6_pipeline/civ6_pipeline/target/docker/civ6_save_renderer/plot_map/plot_map"
+  viash_version: "0.7.3"
+  git_commit: "b536a1f7566ad643e9c75fa7526d9e9ef1f53034"
+  git_remote: "https://github.com/viash-io/civ6_pipeline"
