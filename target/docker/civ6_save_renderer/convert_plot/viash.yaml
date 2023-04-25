@@ -432,9 +432,9 @@ functionality:
         rm -rf /var/lib/apt/lists/*
       
       LABEL org.opencontainers.image.description="Companion container for running component civ6_save_renderer convert_plot"
-      LABEL org.opencontainers.image.created="2023-04-25T07:32:23Z"
+      LABEL org.opencontainers.image.created="2023-04-25T07:46:53Z"
       LABEL org.opencontainers.image.source="https://github.com/viash-io/civ6_pipeline"
-      LABEL org.opencontainers.image.revision="477c3fdf3a38d572efa77aa0794e8fcd447a0ea0"
+      LABEL org.opencontainers.image.revision="965680d19205dbcf62dc7f53d4b034a45d74f22a"
       LABEL org.opencontainers.image.version="main_build"
       VIASHDOCKER
       }
@@ -990,5 +990,5 @@ info:
   output: "target/docker/civ6_save_renderer/convert_plot"
   executable: "target/docker/civ6_save_renderer/convert_plot/convert_plot"
   viash_version: "0.6.2"
-  git_commit: "477c3fdf3a38d572efa77aa0794e8fcd447a0ea0"
+  git_commit: "965680d19205dbcf62dc7f53d4b034a45d74f22a"
   git_remote: "https://github.com/viash-io/civ6_pipeline"
