@@ -429,9 +429,9 @@ functionality:
       
       RUN :
       LABEL org.opencontainers.image.description="Companion container for running component civ6_save_renderer parse_map"
-      LABEL org.opencontainers.image.created="2022-11-30T06:07:41Z"
+      LABEL org.opencontainers.image.created="2023-04-25T07:32:22Z"
       LABEL org.opencontainers.image.source="https://github.com/viash-io/civ6_pipeline"
-      LABEL org.opencontainers.image.revision="1b32f073dbcd6afd0607642a2f1c56b101245d3c"
+      LABEL org.opencontainers.image.revision="477c3fdf3a38d572efa77aa0794e8fcd447a0ea0"
       LABEL org.opencontainers.image.version="main_build"
       VIASHDOCKER
       }
@@ -1003,5 +1003,5 @@ info:
   output: "target/docker/civ6_save_renderer/parse_map"
   executable: "target/docker/civ6_save_renderer/parse_map/parse_map"
   viash_version: "0.6.2"
-  git_commit: "1b32f073dbcd6afd0607642a2f1c56b101245d3c"
+  git_commit: "477c3fdf3a38d572efa77aa0794e8fcd447a0ea0"
   git_remote: "https://github.com/viash-io/civ6_pipeline"
