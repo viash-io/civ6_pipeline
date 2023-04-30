@@ -7,8 +7,7 @@ const zlib = require('zlib');
  */
 function decompress(savefile) {
   const civsav = savefile;
-  const modindex = civsav.lastIndexOf('MOD_TITLE');
-  const bufstartindex = civsav.indexOf(new Buffer([0x78, 0x9c]), modindex);
+  const bufstartindex = civsav.indexOf(new Buffer([1, 0, 0, 0, 0, 0, 1, 0, 0x78, 0x9c])) + 8;
   const bufendindex = civsav.lastIndexOf(new Buffer([0x00, 0x00, 0xFF, 0xFF]));
 
   const data = civsav.slice(bufstartindex, bufendindex);
