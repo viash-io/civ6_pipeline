@@ -72,6 +72,19 @@ thisConfig = processConfig(jsonSlurper.parseText('''{
       }
     ],
     "description" : "Extract game settings from a Civ6 save file as a yaml.",
+    "test_resources" : [
+      {
+        "type" : "bash_script",
+        "path" : "test.sh",
+        "is_executable" : true,
+        "parent" : "file:/home/runner/work/civ6_pipeline/civ6_pipeline/src/civ6_save_renderer/parse_header/"
+      },
+      {
+        "type" : "file",
+        "path" : "data/AutoSave_0158.Civ6Save",
+        "parent" : "file:///home/runner/work/civ6_pipeline/civ6_pipeline/"
+      }
+    ],
     "status" : "enabled",
     "set_wd_to_resources_dir" : false
   },
@@ -92,6 +105,14 @@ thisConfig = processConfig(jsonSlurper.parseText('''{
           "type" : "docker",
           "run" : [
             "cd /home/node && npm install civ6-save-parser"
+          ]
+        }
+      ],
+      "test_setup" : [
+        {
+          "type" : "docker",
+          "run" : [
+            "wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 && chmod a+x /usr/local/bin/yq"
           ]
         }
       ]
@@ -118,7 +139,7 @@ thisConfig = processConfig(jsonSlurper.parseText('''{
     "config" : "/home/runner/work/civ6_pipeline/civ6_pipeline/src/civ6_save_renderer/parse_header/config.vsh.yaml",
     "platform" : "nextflow",
     "viash_version" : "0.7.3",
-    "git_commit" : "e6c384987e3db5b44ed1b2f9c856693ce0b71df0",
+    "git_commit" : "23951d269e137092ba13a39e8a6ea37fbf29104a",
     "git_remote" : "https://github.com/viash-io/civ6_pipeline"
   }
 }'''))
