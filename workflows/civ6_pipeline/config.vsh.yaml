@@ -12,6 +12,9 @@ functionality:
       roles: [ author, maintainer ]
       props: { github: tverbeiren }
   arguments:
+    - name: "--id"
+      type: string
+      required: true
     - name: "--input"
       alternatives: [ "-i" ]
       type: file
