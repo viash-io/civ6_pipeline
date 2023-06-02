@@ -1,3 +1,3 @@
 #!/bin/bash
 
-magick "$par_input" -flatten "$par_output"
+magick convert "$par_input" -flatten "$par_output"
