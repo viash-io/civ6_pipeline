@@ -21,13 +21,13 @@ functionality:
       type: file
       required: true
       direction: output
-      description: "Output log in markdown format"
-      example: sample.md
+      description: "Output log in Quarto format"
+      example: sample.qmd
     - name: "--resources"
       type: file
       required: true
       direction: output
-      description: "Resources for markdown log"
+      description: "Resources for Quarto log"
       example: resources
   resources:
     - type: bash_script
