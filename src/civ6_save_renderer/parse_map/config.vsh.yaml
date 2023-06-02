@@ -23,6 +23,6 @@ functionality:
     - path: helper.js
 platforms:
   - type: docker
-    image: node
+    image: node:15-buster
   - type: nextflow
   - type: native

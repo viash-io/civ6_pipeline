@@ -1,15 +1,5 @@
 
--   [Civ6 post-game summary](#civ6-post-game-summary)
-    -   [Run a release build of the
-        pipeline](#run-a-release-build-of-the-pipeline)
-    -   [Run the development build of the
-        pipeline](#run-the-development-build-of-the-pipeline)
-    -   [Background on Civilization](#background-on-civilization)
-        -   [Post-game replay map](#post-game-replay-map)
-        -   [Rendering post-game replay
-            maps](#rendering-post-game-replay-maps)
-
-# Civ6 post-game summary
+# Civ6 post-game summary POC
 
 This is a toy dataset which uses savefiles from a game called
 Civilization VI and generates a post-game video of the in-game tile
@@ -20,43 +10,63 @@ in the diagram below.
 
 ![Workflow diagram](docs/images/workflow.png)
 
+## Requirements
+
+Install Viash and Nextflow in a directory that are on the `$PATH`,
+e.g. `$HOME/bin`.
+
+``` bash
+mkdir $HOME/bin
+curl -fsSL http://dl.viash.io | bash; mv viash $HOME/bin
+curl -s https://get.nextflow.io | bash; mv nextflow $HOME/bin
+```
+
+Make sure that Viash and Nextflow are on the \$PATH by checking whether
+the following commands work:
+
+``` bash
+viash -v
+nextflow -v
+```
+
 ## Run a release build of the pipeline
 
 ``` sh
-export NXF_VER=21.04.1
-
-nextflow \
-  run https://github.com/viash-io/civ6_pipeline.git \
+NXF_VER=22.04.5 nextflow \
+  run viash-io/civ6_pipeline \
   -r main_build \
-  -main-script workflows/run/main.nf \
+  -main-script workflows/civ6_pipeline/main.nf \
   --input "data/*.Civ6Save" \
   --publishDir "output" \
-  -resume
+  -resume \
+  -with-docker
 ```
 
 <!-- todo: use an actual release -->
 
 ## Run the development build of the pipeline
 
-Download Nextflow and Viash in `./bin`.
-
-``` bash
-bin/init
-```
-
 First build components for the pipeline. Building the docker containers
 from scratch will take a while.
 
 ``` bash
-bin/viash_build
+viash ns build --parallel --setup cb
 ```
 
 Generate the post-game summary movie (stored at `output/output.webm`) by
 running:
 
 ``` bash
-workflows/run/run.sh
+workflows/civ6_pipeline/run.sh
 ```
+
+## Known issues
+
+Note that this pipeline may not extend its support beyond the specific
+assets used in [this
+video](https://www.youtube.com/watch?v=wxw3T9589-c). Rendering other
+world leaders, wonders, and additional elements may require further
+development.
 
 ## Background on Civilization
 
@@ -68,7 +78,7 @@ eXpand, eXploit, and eXterminate), it is also frequently associated with
 the “One More Turn Syndrome”.
 
 ![Comic by Mart Virkus,
-<https://arcaderage.co/2016/10/18/civilization-vi/>](docs/images/mart_virkus_every_civilization_game_ever.jpg)
+https://arcaderage.co/2016/10/18/civilization-vi/](docs/images/mart_virkus_every_civilization_game_ever.jpg)
 
 ### Post-game replay map
 
@@ -78,7 +88,11 @@ of closing a session of Civilization V is by being able to watch a
 ‘postgame map replay’ of which owner owned which tile at any given point
 in time.
 
+<div>
+
 [![](docs/images/civ5_victory_.png)](docs/images/civ5_victory_.webm)
+
+</div>
 
 However, for whatever reason, this feature did not make it in
 Civilization VI. This made a lot of people very angry and been widely
