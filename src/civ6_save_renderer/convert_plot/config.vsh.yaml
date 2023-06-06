@@ -23,6 +23,7 @@ functionality:
 platforms:
   - type: docker
     image: dpokidov/imagemagick:7.1.0-50
+    cmd: /bin/bash
     setup:
       - type: apt
         packages: [ "procps" ]

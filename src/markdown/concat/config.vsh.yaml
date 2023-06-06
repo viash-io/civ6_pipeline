@@ -25,6 +25,7 @@ functionality:
 platforms:
   - type: docker
     image: pandoc/latex
-    apk:
-      packages: bash
+    setup: 
+      - type: apk
+        packages: [ bash ]
   - type: nextflow

@@ -23,20 +23,7 @@ functionality:
       path: docs
 platforms:
   - type: docker
-    image: squidfunk/mkdocs-material
-    setup:
-      - type: apk
-        packages:
-          - bash
-          - build-base
-          - libc-dev
-          - python3-dev
-          - gpgme-dev
-          - pango
-      - type: python
-        packages:
-          - mkdocs-awesome-pages-plugin
-          - mkdocs-with-pdf
+    image: dragonflyscience/quarto:2023-05-22
   - type: nextflow
-    publish: true
-    per_id: false
+    auto:
+      publish: true

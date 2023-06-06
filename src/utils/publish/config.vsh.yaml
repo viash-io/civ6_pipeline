@@ -17,7 +17,7 @@ functionality:
   resources:
   - type: bash_script
     path: ./code.sh
-  tests:
+  test_resources:
   - type: bash_script
     path: test/test_publish.sh
 platforms:
