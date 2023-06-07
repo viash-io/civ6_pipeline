@@ -8,7 +8,7 @@ functionality:
       description: "Input directory"
       required: true
       example: "docs/"
-    - name: "--report"
+    - name: "--output"
       type: file
       description: "Output directory"
       required: true
@@ -17,13 +17,11 @@ functionality:
   resources:
     - type: bash_script
       path: ./code.sh
-    - type: file
-      path: mkdocs.yml
-    - type: file
-      path: docs
 platforms:
   - type: docker
     image: dragonflyscience/quarto:2023-05-22
   - type: nextflow
+    directives:
+      stageInMode: copy
     auto:
       publish: true
