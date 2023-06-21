@@ -21,6 +21,10 @@ functionality:
     - type: javascript_script
       path: script.js
     - path: helper.js
+  test_resources:
+    - type: bash_script
+      path: test.sh
+    - path: /data/AutoSave_0162.Civ6Save
 platforms:
   - type: docker
     image: node:15-buster
