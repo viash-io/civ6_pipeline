@@ -5,7 +5,7 @@ meta_resources_dir="data"
 meta_executable="target/docker/civ6_save_renderer/parse_header/parse_header"
 ## VIASH END
 
-input_path="${meta_resources_dir}/AutoSave_0158.Civ6Save"
+input_path="${meta_resources_dir}/AutoSave_0162.Civ6Save"
 output_path="output.yaml"
 
 # Run executable
@@ -28,7 +28,7 @@ if [[ `yq .MAP_SIZE $output_path` != "MAPSIZE_STANDARD" ]]; then
   echo Incorrect MAP_SIZE
   exit 1
 fi
-if [[ `yq .GAME_TURN $output_path` != "158" ]]; then
+if [[ `yq .GAME_TURN $output_path` != "162" ]]; then
   echo Incorrect GAME_TURN
   exit 1
 fi
