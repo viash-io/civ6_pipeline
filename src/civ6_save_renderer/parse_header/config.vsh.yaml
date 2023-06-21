@@ -23,7 +23,7 @@ functionality:
   test_resources:
     - type: bash_script
       path: test.sh
-    - path: /data/AutoSave_0158.Civ6Save
+    - path: /data/AutoSave_0162.Civ6Save
 platforms:
   - type: docker
     image: node:15-buster

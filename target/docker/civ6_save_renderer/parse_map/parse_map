@@ -390,9 +390,9 @@ FROM node:15-buster
 
 RUN :
 LABEL org.opencontainers.image.description="Companion container for running component civ6_save_renderer parse_map"
-LABEL org.opencontainers.image.created="2023-05-16T10:42:02Z"
+LABEL org.opencontainers.image.created="2023-06-21T20:39:13Z"
 LABEL org.opencontainers.image.source="https://github.com/viash-io/civ6_pipeline"
-LABEL org.opencontainers.image.revision="23951d269e137092ba13a39e8a6ea37fbf29104a"
+LABEL org.opencontainers.image.revision="bdf2918d5e0d9af933b42579f458a7e45b6b5ace"
 LABEL org.opencontainers.image.version="main_build"
 VIASHDOCKER
 }

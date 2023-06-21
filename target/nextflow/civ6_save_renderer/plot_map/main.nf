@@ -95,6 +95,24 @@ thisConfig = processConfig(jsonSlurper.parseText('''{
       }
     ],
     "description" : "Use the settings yaml and the map tsv to generate a plot (as PDF).",
+    "test_resources" : [
+      {
+        "type" : "r_script",
+        "path" : "test.R",
+        "is_executable" : true,
+        "parent" : "file:/home/runner/work/civ6_pipeline/civ6_pipeline/src/civ6_save_renderer/plot_map/"
+      },
+      {
+        "type" : "file",
+        "path" : "data/AutoSave_0162_header.yaml",
+        "parent" : "file:///home/runner/work/civ6_pipeline/civ6_pipeline/"
+      },
+      {
+        "type" : "file",
+        "path" : "data/AutoSave_0162_map.tsv",
+        "parent" : "file:///home/runner/work/civ6_pipeline/civ6_pipeline/"
+      }
+    ],
     "status" : "enabled",
     "set_wd_to_resources_dir" : false
   },
@@ -102,7 +120,7 @@ thisConfig = processConfig(jsonSlurper.parseText('''{
     {
       "type" : "docker",
       "id" : "docker",
-      "image" : "rocker/tidyverse:4.2",
+      "image" : "eddelbuettel/r2u:22.04",
       "target_organization" : "viash-io/civ6_pipeline",
       "target_registry" : "ghcr.io",
       "namespace_separator" : "/",
@@ -118,7 +136,13 @@ thisConfig = processConfig(jsonSlurper.parseText('''{
             "yaml",
             "bit64",
             "ggnewscale",
-            "cowplot"
+            "cowplot",
+            "readr",
+            "purrr",
+            "dplyr",
+            "ggplot2",
+            "tibble",
+            "processx"
           ],
           "github" : [
             "rcannood/civ6saves"
@@ -149,7 +173,7 @@ thisConfig = processConfig(jsonSlurper.parseText('''{
     "config" : "/home/runner/work/civ6_pipeline/civ6_pipeline/src/civ6_save_renderer/plot_map/config.vsh.yaml",
     "platform" : "nextflow",
     "viash_version" : "0.7.3",
-    "git_commit" : "23951d269e137092ba13a39e8a6ea37fbf29104a",
+    "git_commit" : "bdf2918d5e0d9af933b42579f458a7e45b6b5ace",
     "git_remote" : "https://github.com/viash-io/civ6_pipeline"
   }
 }'''))
@@ -158,7 +182,7 @@ thisScript = '''set -e
 tempscript=".viash_script.sh"
 cat > "$tempscript" << VIASHMAIN
 
-library(tidyverse)
+library(ggplot2)
 library(cowplot)
 
 ## VIASH START
