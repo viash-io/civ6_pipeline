@@ -52,6 +52,10 @@ function savetomap(savefile) {
     mapWidthStartIndex += 1;
     mapWidthStartIndex = bin.indexOf(mapWidthSearchBuffer, mapWidthStartIndex);
     width = bin.readInt16LE(mapWidthStartIndex + 8);
+    
+    if (width < 0) {
+      width = 0;
+    }
   }
 
   let mindex = mapstartindex + 16;
