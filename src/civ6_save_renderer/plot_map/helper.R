@@ -1,4 +1,9 @@
-library(tidyverse)
+library(readr, warn.conflicts = FALSE)
+library(purrr, warn.conflicts = FALSE)
+library(dplyr, warn.conflicts = FALSE)
+library(ggplot2, warn.conflicts = FALSE)
+library(tibble, warn.conflicts = FALSE)
+
 requireNamespace("ggforce", quietly = TRUE)
 requireNamespace("civ6saves", quietly = TRUE)
 requireNamespace("bit64", quietly = TRUE)

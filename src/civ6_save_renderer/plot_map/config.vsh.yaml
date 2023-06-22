@@ -28,9 +28,14 @@ functionality:
     - type: r_script
       path: script.R
     - path: helper.R
+  test_resources:
+    - type: r_script
+      path: test.R
+    - path: /data/AutoSave_0162_header.yaml
+    - path: /data/AutoSave_0162_map.tsv
 platforms:
   - type: docker
-    image: rocker/tidyverse:4.2
+    image: eddelbuettel/r2u:22.04
     setup: 
       - type: r
         cran:
@@ -39,6 +44,12 @@ platforms:
           - bit64
           - ggnewscale
           - cowplot
+          - readr
+          - purrr
+          - dplyr
+          - ggplot2
+          - tibble
+          - processx
         github:
           - rcannood/civ6saves
   - type: nextflow
