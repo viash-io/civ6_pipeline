@@ -1,0 +1,7 @@
+# Arguments
+input: # please fill in - example: "save.Civ6Save"
+# output: "$id.$key.output.bin"
+
+# Nextflow input-output arguments
+publish_dir: # please fill in - example: "output/"
+# param_list: "my_params.yaml"

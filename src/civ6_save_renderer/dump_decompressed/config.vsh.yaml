@@ -1,7 +1,7 @@
 functionality:
-  name: parse_map
+  name: dump_decompressed
   namespace: civ6_save_renderer
-  description: "Extract map information from a Civ6 save file as a tsv."
+  description: "Dump the decompressed binary data from a Civ6Save file."
   arguments:
     - name: "--input"
       alternatives: [-i]
@@ -14,17 +14,13 @@ functionality:
       alternatives: [-o]
       type: file
       required: true
-      example: "output.tsv"
+      example: "output.bin"
       direction: output
-      description: "Path to store the output TSV file at."
+      description: "Where to store the binary decompressed output."
   resources:
     - type: javascript_script
       path: script.js
-    - path: helper.js
-  test_resources:
-    - type: bash_script
-      path: test.sh
-    - path: /data/AutoSave_0162.Civ6Save
+    - path: ../parse_map/helper.js
 platforms:
   - type: docker
     image: node:18-buster

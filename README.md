@@ -111,3 +111,9 @@ in time. Since the information that we need is stored in a format, we
 need scripts to: 1. extract the information from the binary format (in
 JavaScript), 2. generate a map visualisation (in R), 3. convert all the
 visualisations into a video (with ImageMagick and ffmpeg).
+
+## Inspiration
+
+- [pydt/civ6-save-parser](https://github.com/pydt/civ6-save-parser)
+
+- [lucienmaloney/civ6save-editing](https://github.com/lucienmaloney/civ6save-editing)

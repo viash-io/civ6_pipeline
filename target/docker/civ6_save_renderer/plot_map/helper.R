@@ -44,6 +44,8 @@ read_map <- function(tsv_file) {
     })
 }
 
+default_colours = c('#e6194b', '#3cb44b', '#ffe119', '#4363d8', '#f58231', '#911eb4', '#46f0f0', '#f032e6', '#bcf60c', '#fabebe', '#008080', '#e6beff', '#9a6324', '#fffac8', '#800000', '#aaffc3', '#808000', '#ffd8b1', '#000075', '#808080', '#ffffff', '#000000')
+
 make_map_plot <- function(game_data, map_data) {
   # get leader info
   owner_ids <- map_data$owner %>% unique() %>% sort()
@@ -53,7 +55,14 @@ make_map_plot <- function(game_data, map_data) {
     game_data$CIVS %>%
       transmute(owner = row_number() - 1L, leader = LEADER_NAME) %>%
       left_join(civ6saves::leaders, by = "leader") %>%
-      rename(leader_inner_colour = leader_outer_colour, leader_outer_colour = leader_inner_colour),
+      rename(leader_inner_colour = leader_outer_colour, leader_outer_colour = leader_inner_colour) %>%
+      transmute(
+        owner,
+        leader,
+        leader_name = ifelse(is.na(leader_name), stringr::str_to_title(stringr::str_replace_all(stringr::str_replace(leader, "LEADER_", ""), "_", " ")), leader_name),
+        leader_outer_colour = ifelse(is.na(leader_outer_colour), default_colours[owner], leader_outer_colour),
+        leader_inner_colour = ifelse(is.na(leader_inner_colour), default_colours[length(default_colours) - 1 - owner], leader_inner_colour)
+      ),
     tibble(
       owner = setdiff(owner_ids, c(seq_len(nrow(game_data$CIVS)) - 1, 62L, 255L))
     ) %>% mutate(
@@ -106,7 +115,7 @@ make_map_plot <- function(game_data, map_data) {
 
   cities <- tab %>% group_by(owner, city_1) %>% filter(district == min(district)) %>% ungroup()
 
-  players <- game_data$ACTORS %>% filter(ACTOR_TYPE == "CIVILIZATION_LEVEL_FULL_CIV") %>% select(leader = LEADER_NAME) %>% left_join(civ6saves::leaders, by = "leader")
+  players <- game_data$ACTORS %>% filter(ACTOR_TYPE == "CIVILIZATION_LEVEL_FULL_CIV") %>% select(leader = LEADER_NAME) %>% left_join(leader_colours, by = "leader")
 
   g <- g0 +
     ggforce::geom_regon(aes(r = civ6saves:::xy_ratio * .9), tab %>% filter(feature_name == "Ice"), fill = civ6saves::feature_palette[["Ice"]], alpha = .4) +
