@@ -8,8 +8,8 @@ const zlib = require('zlib');
 function decompress(savefile) {
   const civsav = savefile;
   const bufstartindex =
-    civsav.indexOf(new Buffer([0, 0, 0, 0, 0, 1, 0, 0x78, 0x9c])) + 7;
-  const bufendindex = civsav.lastIndexOf(new Buffer([0x00, 0x00, 0xFF, 0xFF]));
+    civsav.indexOf(Buffer.from([0, 0, 0, 0, 0, 1, 0, 0x78, 0x9c])) + 7;
+  const bufendindex = civsav.lastIndexOf(Buffer.from([0x00, 0x00, 0xFF, 0xFF]));
 
   const data = civsav.slice(bufstartindex, bufendindex);
 
@@ -35,13 +35,13 @@ function decompress(savefile) {
  */
 function savetomap(savefile) {
   const bin = decompress(savefile);
-  const searchBuffer = new Buffer([0x0E, 0x00, 0x00, 0x00, 0x0F, 0x00, 0x00, 0x00, 0x06, 0x00, 0x00, 0x00]);
+  const searchBuffer = Buffer.from([0x0E, 0x00, 0x00, 0x00, 0x0F, 0x00, 0x00, 0x00, 0x06, 0x00, 0x00, 0x00]);
   const mapstartindex = bin.indexOf(searchBuffer);
   const tiles = bin.readInt32LE(mapstartindex + 12);
   const map = {'tiles': []};
 
   const mapWidthSearchBuffer = Buffer.concat([
-    new Buffer([0x00, 0x00, 0x00, 0x00]),
+    Buffer.from([0x00, 0x00, 0x00, 0x00]),
     bin.subarray(mapstartindex + 12, mapstartindex + 16),
   ]);
 

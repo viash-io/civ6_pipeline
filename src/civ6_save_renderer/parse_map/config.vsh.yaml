@@ -27,6 +27,6 @@ functionality:
     - path: /data/AutoSave_0162.Civ6Save
 platforms:
   - type: docker
-    image: node:15-buster
+    image: node:18-buster
   - type: nextflow
   - type: native
