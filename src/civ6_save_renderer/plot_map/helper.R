@@ -59,7 +59,7 @@ make_map_plot <- function(game_data, map_data) {
       transmute(
         owner,
         leader,
-        leader_name = ifelse(is.na(leader_name), str_to_title(str_replace_all(str_replace(leader, "LEADER_", ""), "_", " ")), leader_name),
+        leader_name = ifelse(is.na(leader_name), stringr::str_to_title(stringr::str_replace_all(stringr::str_replace(leader, "LEADER_", ""), "_", " ")), leader_name),
         leader_outer_colour = ifelse(is.na(leader_outer_colour), default_colours[owner], leader_outer_colour),
         leader_inner_colour = ifelse(is.na(leader_inner_colour), default_colours[length(default_colours) - 1 - owner], leader_inner_colour)
       ),
