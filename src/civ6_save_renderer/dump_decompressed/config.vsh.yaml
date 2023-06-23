@@ -1,0 +1,28 @@
+functionality:
+  name: dump_decompressed
+  namespace: civ6_save_renderer
+  description: "Dump the decompressed binary data from a Civ6Save file."
+  arguments:
+    - name: "--input"
+      alternatives: [-i]
+      type: file
+      required: true
+      example: "save.Civ6Save"
+      must_exist: true
+      description: "A Civ6 save file."
+    - name: "--output"
+      alternatives: [-o]
+      type: file
+      required: true
+      example: "output.bin"
+      direction: output
+      description: "Where to store the binary decompressed output."
+  resources:
+    - type: javascript_script
+      path: script.js
+    - path: ../parse_map/helper.js
+platforms:
+  - type: docker
+    image: node:18-buster
+  - type: nextflow
+  - type: native
