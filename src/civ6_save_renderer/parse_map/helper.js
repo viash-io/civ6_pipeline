@@ -90,37 +90,21 @@ function savetomap(savefile) {
       'flags1': bin.readUInt8(mindex + 48),                // bits: [is_pillaged, road_pillaged??, has_road, is_capital_or_citystate, -, river_sw, river_e, river_se]
       'flags2': bin.readUInt8(mindex + 49),                // bits: [cliff_sw, cliff_e, cliff_se, -, -, is_impassable, is_owned, -]
       'flags3': bin.readUInt8(mindex + 50),                // bits: [is_ice, -, -, -, -, -, -, -]
-      'flags4': bin.readUInt8(mindex + 51),                // bits: [buffer length 24, buffer length 44, -, -, -, -, -, -]
-      'flags5': bin.readUInt8(mindex + 52),                // empty?
-      'flags6': bin.readUInt8(mindex + 53),                // empty?
-      'flags7': bin.readUInt8(mindex + 54),                // empty?
+      'overlayNum': bin.readUint32LE(mindex + 51),
     }
     mindex += 55;
-    
-    let buflength = 0;
 
-    if (obj['flags4'] & 1) {
-      // tile produces/captures co2?
-      obj['buffer1'] = bin.slice(mindex, mindex + 24).toString('hex');
-      obj['buffer1_flag'] = bin.readUInt8(mindex + 20);
-      mindex += 24;
-     
-      if (obj['buffer1_flag'] & 1) {
-        // tile is ski resort or tunnel??
-        obj['buffer2'] = bin.slice(mindex, mindex + 20).toString('hex');
-        mindex += 20;
-      } else {
-        obj['buffer2'] = '';
-      }
-    } else if (obj['flags4'] & 2) {
-      obj['buffer1'] = bin.slice(mindex, mindex + 24).toString('hex');
-      obj['buffer1_flag'] = bin.readUInt8(mindex + 20);
-      obj['buffer2'] = bin.slice(mindex + 24, mindex + 44).toString('hex');
-      mindex += 44;
+    const buflength = {
+      1: 24,
+      2: 44,
+      3: 64
+    }[obj.overlayNum];
+
+    if (buflength) {
+      obj['buffer'] = bin.slice(mindex, mindex + buflength).toString('hex');
+      mindex += buflength;
     } else {
-      obj['buffer1'] = '';
-      obj['buffer1_flag'] = '';
-      obj['buffer2'] = '';
+      obj['buffer'] = '';
     }
 
     if (obj['flags2'] & 64) {
