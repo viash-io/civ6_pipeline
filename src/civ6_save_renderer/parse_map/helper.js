@@ -94,7 +94,7 @@ function savetomap(savefile) {
     }
     mindex += 55;
 
-    const buflength = {
+    let buflength = {
       1: 24,
       2: 44,
       3: 64
@@ -121,6 +121,39 @@ function savetomap(savefile) {
       obj['district'] = '';
       obj['owner'] = '';
       obj['world_wonder'] = '';
+    }
+
+    // Validate next tile terrain to get us synced back up if buffer is bad
+    if (i < tiles - 1) {
+      const terrains = [
+        2213004848,
+        1855786096,
+        1602466867,
+        4226188894,
+        3872285854,
+        2746853616,
+        3852995116,
+        3108058291,
+        1418772217,
+        1223859883,
+        3949113590,
+        3746160061,
+        1743422479,
+        3842183808,
+        699483892,
+        1248885265,
+        1204357597
+      ];
+
+      let nextTerrainOffset = 0;
+
+      while (nextTerrainOffset < 100 && !terrains.includes(bin.readUint32LE(mindex + nextTerrainOffset))) {
+        nextTerrainOffset++;  
+      }
+
+      if (nextTerrainOffset < 100) {
+        mindex = mindex - 12 + nextTerrainOffset;
+      }
     }
     
     obj['tile_length'] = mindex - orig_mindex;
