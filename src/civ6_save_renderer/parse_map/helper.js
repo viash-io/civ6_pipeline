@@ -53,7 +53,8 @@ function savetomap(savefile) {
     mapWidthStartIndex = bin.indexOf(mapWidthSearchBuffer, mapWidthStartIndex);
     width = bin.readInt16LE(mapWidthStartIndex + 8);
     
-    if (width < 0) {
+    // -1 means no match
+    if (width < -1) {
       width = 0;
     }
   }
@@ -147,11 +148,16 @@ function savetomap(savefile) {
 
       let nextTerrainOffset = 0;
 
-      while (nextTerrainOffset < 100 && !terrains.includes(bin.readUint32LE(mindex + nextTerrainOffset))) {
-        nextTerrainOffset++;  
+      const SEARCH_LENGTH = 1000;
+
+      while (
+        nextTerrainOffset < SEARCH_LENGTH &&
+        !terrains.includes(bin.readUint32LE(mindex + nextTerrainOffset))
+      ) {
+        nextTerrainOffset++;
       }
 
-      if (nextTerrainOffset < 100) {
+      if (nextTerrainOffset < SEARCH_LENGTH) {
         mindex = mindex - 12 + nextTerrainOffset;
       }
     }
