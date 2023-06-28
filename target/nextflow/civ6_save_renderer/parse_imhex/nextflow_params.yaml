@@ -1,0 +1,10 @@
+# Arguments
+input: # please fill in - example: "input.bin"
+pattern: # please fill in - example: "pattern.hexpat"
+# includes: "dir"
+# format: "dir"
+# output: "$id.$key.output.txt"
+
+# Nextflow input-output arguments
+publish_dir: # please fill in - example: "output/"
+# param_list: "my_params.yaml"

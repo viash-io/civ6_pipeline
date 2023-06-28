@@ -1,0 +1,61 @@
+functionality:
+  name: parse_imhex
+  namespace: civ6_save_renderer
+  description: "..."
+  arguments:
+    - name: "--input"
+      alternatives: [-i]
+      type: file
+      required: true
+      example: "input.bin"
+      must_exist: true
+      description: "Input file"
+    - name: "--pattern"
+      alternatives: [-p]
+      type: file
+      required: true
+      example: "pattern.hexpat"
+      must_exist: true
+      description: "Pattern file"
+    - name: "--includes"
+      type: file
+      example: "dir"
+      must_exist: true
+      description: "Include dir"
+    - name: "--format"
+      alternatives: [-f]
+      type: string
+      example: "dir"
+      description: "Format (json, yaml, html)"
+    - name: "--output"
+      alternatives: [-o]
+      type: file
+      required: true
+      example: "output.txt"
+      direction: output
+      description: "Output file"
+  resources:
+    - type: bash_script
+      path: script.sh
+platforms:
+  - type: docker
+    image: ubuntu:22.04
+    setup:
+      - type: apt
+        packages: [build-essential, gcc-12, g++-12, lld, cmake, make, git]
+      - type: docker
+        run: |
+          git clone --recurse-submodules https://github.com/WerWolv/PatternLanguage.git && \
+            mkdir -p PatternLanguage/build && \
+            cd PatternLanguage/build && \
+            CC=gcc-12 CXX=g++-12 cmake                \
+              -DCMAKE_BUILD_TYPE=Debug                \
+              -DCMAKE_INSTALL_PREFIX="/usr"           \
+              -DCMAKE_C_FLAGS="-fuse-ld=lld"          \
+              -DCMAKE_CXX_FLAGS="-fuse-ld=lld"        \
+              -DLIBPL_ENABLE_TESTS=OFF                \
+              -DLIBPL_ENABLE_CLI=ON                   \
+              .. && \
+            make install
+  - type: nextflow
+  - type: native
