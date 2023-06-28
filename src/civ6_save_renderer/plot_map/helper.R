@@ -3,6 +3,7 @@ library(purrr, warn.conflicts = FALSE)
 library(dplyr, warn.conflicts = FALSE)
 library(ggplot2, warn.conflicts = FALSE)
 library(tibble, warn.conflicts = FALSE)
+library(stringr)
 
 requireNamespace("ggforce", quietly = TRUE)
 requireNamespace("civ6saves", quietly = TRUE)
@@ -50,21 +51,33 @@ make_map_plot <- function(game_data, map_data) {
   # get leader info
   owner_ids <- map_data$owner %>% unique() %>% sort()
 
+  civs = game_data$CIVS %>% transmute(owner = row_number() - 1L, leader = LEADER_NAME)
+
   # assign colours to civs
   leader_colours <- bind_rows(
-    game_data$CIVS %>%
-      transmute(owner = row_number() - 1L, leader = LEADER_NAME) %>%
+    civs %>%
       left_join(civ6saves::leaders, by = "leader") %>%
       rename(leader_inner_colour = leader_outer_colour, leader_outer_colour = leader_inner_colour) %>%
       transmute(
         owner,
         leader,
-        leader_name = ifelse(is.na(leader_name), stringr::str_to_title(stringr::str_replace_all(stringr::str_replace(leader, "LEADER_", ""), "_", " ")), leader_name),
-        leader_outer_colour = ifelse(is.na(leader_outer_colour), default_colours[owner], leader_outer_colour),
-        leader_inner_colour = ifelse(is.na(leader_inner_colour), default_colours[length(default_colours) - 1 - owner], leader_inner_colour)
+        leader_name = 
+          str_replace_all(
+            make.unique(
+              ifelse(
+                is.na(leader_name),
+                stringr::str_to_title(stringr::str_replace_all(stringr::str_replace(leader, "LEADER_", ""), "_", " ")),
+                leader_name
+              ),
+              sep= " "
+            ),
+            "(\\d+)$", function(x) as.numeric(x) + 1
+          ),
+        leader_outer_colour = ifelse(is.na(leader_outer_colour) | length(which(civs$leader == leader) > 1), default_colours[owner], leader_outer_colour),
+        leader_inner_colour = ifelse(is.na(leader_inner_colour) | length(which(civs$leader == leader) > 1), default_colours[length(default_colours) - 1 - owner], leader_inner_colour)
       ),
     tibble(
-      owner = setdiff(owner_ids, c(seq_len(nrow(game_data$CIVS)) - 1, 62L, 255L))
+      owner = setdiff(owner_ids, c(seq_len(nrow(civs)) - 1, 62L, 255L))
     ) %>% mutate(
       leader = NA_character_,
       leader_name = paste0("City State ", seq_along(owner)),
@@ -115,7 +128,7 @@ make_map_plot <- function(game_data, map_data) {
 
   cities <- tab %>% group_by(owner, city_1) %>% filter(district == min(district)) %>% ungroup()
 
-  players <- game_data$ACTORS %>% filter(ACTOR_TYPE == "CIVILIZATION_LEVEL_FULL_CIV") %>% select(leader = LEADER_NAME) %>% left_join(leader_colours, by = "leader")
+  players <- civs %>% left_join(leader_colours, by = "owner")
 
   g <- g0 +
     ggforce::geom_regon(aes(r = civ6saves:::xy_ratio * .9), tab %>% filter(feature_name == "Ice"), fill = civ6saves::feature_palette[["Ice"]], alpha = .4) +

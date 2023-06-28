@@ -51,10 +51,14 @@ function savetomap(savefile) {
   while (width === 0) {
     mapWidthStartIndex += 1;
     mapWidthStartIndex = bin.indexOf(mapWidthSearchBuffer, mapWidthStartIndex);
+
+    if (mapWidthStartIndex == -1) {
+      throw new Error(`Couldn't find map width start index...`)
+    }
+
     width = bin.readInt16LE(mapWidthStartIndex + 8);
     
-    // -1 means no match
-    if (width < -1) {
+    if (width < 0) {
       width = 0;
     }
   }
