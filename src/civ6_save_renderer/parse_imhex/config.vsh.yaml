@@ -1,7 +1,7 @@
 functionality:
   name: parse_imhex
   namespace: civ6_save_renderer
-  description: "..."
+  description: "This functionality uses an ImHex format (.hex) to parse a binary file into a JSON format."
   arguments:
     - name: "--input"
       alternatives: [-i]
@@ -9,31 +9,42 @@ functionality:
       required: true
       example: "input.bin"
       must_exist: true
-      description: "Input file"
+      description: "Specify the input file to be parsed."
     - name: "--pattern"
       alternatives: [-p]
       type: file
       required: true
-      example: "pattern.hexpat"
+      example: "pattern.hex"
       must_exist: true
-      description: "Pattern file"
+      description: "Specify the imhex file (.hex) to be used for parsing."
     - name: "--includes"
       type: file
       example: "dir"
       must_exist: true
-      description: "Include dir"
+      description: "Specify one or more directories containing imhex patterns (.imhex) to be included as libraries."
+      multiple: true
+    - name: "--include_std"
+      type: boolean_true
+      description: "Whether to include the std library from the ImHex-Patterns repository"
+    - name: "--include_hex"
+      type: boolean_true
+      description: "Whether to include the hex library from the ImHex-Patterns repository"
+    - name: "--include_type"
+      type: boolean_true
+      description: "Whether to include the type library from the ImHex-Patterns repository"
     - name: "--format"
       alternatives: [-f]
       type: string
       example: "dir"
-      description: "Format (json, yaml, html)"
+      description: "Specify the output format for the parsed data."
+      choices: [json, yaml, html]
     - name: "--output"
       alternatives: [-o]
       type: file
       required: true
-      example: "output.txt"
+      example: "output.json"
       direction: output
-      description: "Output file"
+      description: "Specify the output file for the parsed data."
   resources:
     - type: bash_script
       path: script.sh
@@ -41,13 +52,15 @@ platforms:
   - type: docker
     image: ubuntu:22.04
     setup:
+      # copied the build procedure from the PatternLanguage CI tests
       - type: apt
         packages: [build-essential, gcc-12, g++-12, lld, cmake, make, git]
-      - type: docker
+      - type: docker  
         run: |
-          git clone --recurse-submodules https://github.com/WerWolv/PatternLanguage.git && \
-            mkdir -p PatternLanguage/build && \
-            cd PatternLanguage/build && \
+          git clone --depth 1 --recurse-submodules --shallow-submodules https://github.com/WerWolv/PatternLanguage.git /opt/PatternLanguage && \
+            cd /opt/PatternLanguage/ && \
+            mkdir -p build && \
+            cd build && \
             CC=gcc-12 CXX=g++-12 cmake                \
               -DCMAKE_BUILD_TYPE=Debug                \
               -DCMAKE_INSTALL_PREFIX="/usr"           \
@@ -57,5 +70,8 @@ platforms:
               -DLIBPL_ENABLE_CLI=ON                   \
               .. && \
             make install
+      - type: docker
+        run: |
+          git clone --depth 1 https://github.com/WerWolv/ImHex-Patterns.git /opt/ImHex-Patterns
   - type: nextflow
   - type: native
