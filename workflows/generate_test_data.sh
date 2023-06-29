@@ -28,4 +28,4 @@ viash run src/civ6_save_renderer/parse_imhex/config.vsh.yaml -- \
   --output ${output_prefix}_map.json \
   --pattern ../civ6save_analysis/main.hex \
   --includes ../civ6save_analysis/patterns/ \
-  --include_std
+  --include_imhex_patterns

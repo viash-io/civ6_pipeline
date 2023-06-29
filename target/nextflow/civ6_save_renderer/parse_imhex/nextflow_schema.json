@@ -24,19 +24,9 @@
             "description": "Specify one or more directories containing imhex patterns (.imhex) to be included as libraries.",
             "default": ""
           },
-          "include_std": {
+          "include_imhex_patterns": {
             "type": "boolean",
-            "description": "Whether to include the std library from the ImHex-Patterns repository",
-            "default": "False"
-          },
-          "include_hex": {
-            "type": "boolean",
-            "description": "Whether to include the hex library from the ImHex-Patterns repository",
-            "default": "False"
-          },
-          "include_type": {
-            "type": "boolean",
-            "description": "Whether to include the type library from the ImHex-Patterns repository",
+            "description": "Whether to include the standard patterns from the ImHex-Patterns repository",
             "default": "False"
           },
           "format": {

@@ -13,14 +13,8 @@ for var in $par_includes; do
   extra_args+=( --includes "$var" )
 done
 
-if [ "$par_include_std" == "true" ]; then
-  extra_args+=( --includes "/opt/ImHex-Patterns/includes/std/" )
-fi
-if [ "$par_include_hex" == "true" ]; then
-  extra_args+=( --includes "/opt/ImHex-Patterns/includes/hex/" )
-fi
-if [ "$par_include_type" == "true" ]; then
-  extra_args+=( --includes "/opt/ImHex-Patterns/includes/type/" )
+if [ "$par_include_imhex_patterns" == "true" ]; then
+  extra_args+=( --includes "/opt/ImHex-Patterns/includes/" )
 fi
 
 # run command

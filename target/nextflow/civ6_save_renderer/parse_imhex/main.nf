@@ -79,22 +79,8 @@ thisConfig = processConfig(jsonSlurper.parseText('''{
       },
       {
         "type" : "boolean_true",
-        "name" : "--include_std",
-        "description" : "Whether to include the std library from the ImHex-Patterns repository",
-        "direction" : "input",
-        "dest" : "par"
-      },
-      {
-        "type" : "boolean_true",
-        "name" : "--include_hex",
-        "description" : "Whether to include the hex library from the ImHex-Patterns repository",
-        "direction" : "input",
-        "dest" : "par"
-      },
-      {
-        "type" : "boolean_true",
-        "name" : "--include_type",
-        "description" : "Whether to include the type library from the ImHex-Patterns repository",
+        "name" : "--include_imhex_patterns",
+        "description" : "Whether to include the standard patterns from the ImHex-Patterns repository",
         "direction" : "input",
         "dest" : "par"
       },
@@ -212,7 +198,7 @@ thisConfig = processConfig(jsonSlurper.parseText('''{
     "config" : "/home/runner/work/civ6_pipeline/civ6_pipeline/src/civ6_save_renderer/parse_imhex/config.vsh.yaml",
     "platform" : "nextflow",
     "viash_version" : "0.7.3",
-    "git_commit" : "ae458ae22e178cfc277673bd63ba60987c55003e",
+    "git_commit" : "c06d0466099674e64efb4473f0792d6ae944645a",
     "git_remote" : "https://github.com/viash-io/civ6_pipeline"
   }
 }'''))
@@ -226,9 +212,7 @@ cat > "$tempscript" << VIASHMAIN
 $( if [ ! -z ${VIASH_PAR_INPUT+x} ]; then echo "${VIASH_PAR_INPUT}" | sed "s#'#'\\"'\\"'#g;s#.*#par_input='&'#" ; else echo "# par_input="; fi )
 $( if [ ! -z ${VIASH_PAR_PATTERN+x} ]; then echo "${VIASH_PAR_PATTERN}" | sed "s#'#'\\"'\\"'#g;s#.*#par_pattern='&'#" ; else echo "# par_pattern="; fi )
 $( if [ ! -z ${VIASH_PAR_INCLUDES+x} ]; then echo "${VIASH_PAR_INCLUDES}" | sed "s#'#'\\"'\\"'#g;s#.*#par_includes='&'#" ; else echo "# par_includes="; fi )
-$( if [ ! -z ${VIASH_PAR_INCLUDE_STD+x} ]; then echo "${VIASH_PAR_INCLUDE_STD}" | sed "s#'#'\\"'\\"'#g;s#.*#par_include_std='&'#" ; else echo "# par_include_std="; fi )
-$( if [ ! -z ${VIASH_PAR_INCLUDE_HEX+x} ]; then echo "${VIASH_PAR_INCLUDE_HEX}" | sed "s#'#'\\"'\\"'#g;s#.*#par_include_hex='&'#" ; else echo "# par_include_hex="; fi )
-$( if [ ! -z ${VIASH_PAR_INCLUDE_TYPE+x} ]; then echo "${VIASH_PAR_INCLUDE_TYPE}" | sed "s#'#'\\"'\\"'#g;s#.*#par_include_type='&'#" ; else echo "# par_include_type="; fi )
+$( if [ ! -z ${VIASH_PAR_INCLUDE_IMHEX_PATTERNS+x} ]; then echo "${VIASH_PAR_INCLUDE_IMHEX_PATTERNS}" | sed "s#'#'\\"'\\"'#g;s#.*#par_include_imhex_patterns='&'#" ; else echo "# par_include_imhex_patterns="; fi )
 $( if [ ! -z ${VIASH_PAR_FORMAT+x} ]; then echo "${VIASH_PAR_FORMAT}" | sed "s#'#'\\"'\\"'#g;s#.*#par_format='&'#" ; else echo "# par_format="; fi )
 $( if [ ! -z ${VIASH_PAR_OUTPUT+x} ]; then echo "${VIASH_PAR_OUTPUT}" | sed "s#'#'\\"'\\"'#g;s#.*#par_output='&'#" ; else echo "# par_output="; fi )
 $( if [ ! -z ${VIASH_META_FUNCTIONALITY_NAME+x} ]; then echo "${VIASH_META_FUNCTIONALITY_NAME}" | sed "s#'#'\\"'\\"'#g;s#.*#meta_functionality_name='&'#" ; else echo "# meta_functionality_name="; fi )
@@ -260,14 +244,8 @@ for var in \\$par_includes; do
   extra_args+=( --includes "\\$var" )
 done
 
-if [ "\\$par_include_std" == "true" ]; then
-  extra_args+=( --includes "/opt/ImHex-Patterns/includes/std/" )
-fi
-if [ "\\$par_include_hex" == "true" ]; then
-  extra_args+=( --includes "/opt/ImHex-Patterns/includes/hex/" )
-fi
-if [ "\\$par_include_type" == "true" ]; then
-  extra_args+=( --includes "/opt/ImHex-Patterns/includes/type/" )
+if [ "\\$par_include_imhex_patterns" == "true" ]; then
+  extra_args+=( --includes "/opt/ImHex-Patterns/includes/" )
 fi
 
 # run command

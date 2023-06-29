@@ -23,15 +23,9 @@ functionality:
       must_exist: true
       description: "Specify one or more directories containing imhex patterns (.imhex) to be included as libraries."
       multiple: true
-    - name: "--include_std"
+    - name: "--include_imhex_patterns"
       type: boolean_true
-      description: "Whether to include the std library from the ImHex-Patterns repository"
-    - name: "--include_hex"
-      type: boolean_true
-      description: "Whether to include the hex library from the ImHex-Patterns repository"
-    - name: "--include_type"
-      type: boolean_true
-      description: "Whether to include the type library from the ImHex-Patterns repository"
+      description: "Whether to include the standard patterns from the ImHex-Patterns repository"
     - name: "--format"
       alternatives: [-f]
       type: string
