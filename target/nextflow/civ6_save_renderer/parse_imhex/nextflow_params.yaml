@@ -1,9 +1,12 @@
 # Arguments
 input: # please fill in - example: "input.bin"
-pattern: # please fill in - example: "pattern.hexpat"
-# includes: "dir"
+pattern: # please fill in - example: "pattern.hex"
+# includes: ["dir"]
+include_std: false
+include_hex: false
+include_type: false
 # format: "dir"
-# output: "$id.$key.output.txt"
+# output: "$id.$key.output.json"
 
 # Nextflow input-output arguments
 publish_dir: # please fill in - example: "output/"

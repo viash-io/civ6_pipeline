@@ -157,33 +157,48 @@ VIASH_META_TEMP_DIR="$VIASH_TEMP"
 function ViashHelp {
   echo "parse_imhex main_build"
   echo ""
-  echo "..."
+  echo "This functionality uses an ImHex format (.hex) to parse a binary file into a"
+  echo "JSON format."
   echo ""
   echo "Arguments:"
   echo "    -i, --input"
   echo "        type: file, required parameter, file must exist"
   echo "        example: input.bin"
-  echo "        Input file"
+  echo "        Specify the input file to be parsed."
   echo ""
   echo "    -p, --pattern"
   echo "        type: file, required parameter, file must exist"
-  echo "        example: pattern.hexpat"
-  echo "        Pattern file"
+  echo "        example: pattern.hex"
+  echo "        Specify the imhex file (.hex) to be used for parsing."
   echo ""
   echo "    --includes"
-  echo "        type: file, file must exist"
+  echo "        type: file, multiple values allowed, file must exist"
   echo "        example: dir"
-  echo "        Include dir"
+  echo "        Specify one or more directories containing imhex patterns (.imhex) to be"
+  echo "        included as libraries."
+  echo ""
+  echo "    --include_std"
+  echo "        type: boolean_true"
+  echo "        Whether to include the std library from the ImHex-Patterns repository"
+  echo ""
+  echo "    --include_hex"
+  echo "        type: boolean_true"
+  echo "        Whether to include the hex library from the ImHex-Patterns repository"
+  echo ""
+  echo "    --include_type"
+  echo "        type: boolean_true"
+  echo "        Whether to include the type library from the ImHex-Patterns repository"
   echo ""
   echo "    -f, --format"
   echo "        type: string"
   echo "        example: dir"
-  echo "        Format (json, yaml, html)"
+  echo "        choices: [ json, yaml, html ]"
+  echo "        Specify the output format for the parsed data."
   echo ""
   echo "    -o, --output"
   echo "        type: file, required parameter, output, file must exist"
-  echo "        example: output.txt"
-  echo "        Output file"
+  echo "        example: output.json"
+  echo "        Specify the output file for the parsed data."
 }
 
 ######## Helper functions for setting up Docker images for viash ########
@@ -407,9 +422,10 @@ RUN apt-get update && \
   DEBIAN_FRONTEND=noninteractive apt-get install -y build-essential gcc-12 g++-12 lld cmake make git && \
   rm -rf /var/lib/apt/lists/*
 
-RUN git clone --recurse-submodules https://github.com/WerWolv/PatternLanguage.git && \
-  mkdir -p PatternLanguage/build && \
-  cd PatternLanguage/build && \
+RUN git clone --depth 1 --recurse-submodules --shallow-submodules https://github.com/WerWolv/PatternLanguage.git /opt/PatternLanguage && \
+  cd /opt/PatternLanguage/ && \
+  mkdir -p build && \
+  cd build && \
   CC=gcc-12 CXX=g++-12 cmake                \
     -DCMAKE_BUILD_TYPE=Debug                \
     -DCMAKE_INSTALL_PREFIX="/usr"           \
@@ -420,10 +436,12 @@ RUN git clone --recurse-submodules https://github.com/WerWolv/PatternLanguage.gi
     .. && \
   make install
 
+RUN git clone --depth 1 https://github.com/WerWolv/ImHex-Patterns.git /opt/ImHex-Patterns
+
 LABEL org.opencontainers.image.description="Companion container for running component civ6_save_renderer parse_imhex"
-LABEL org.opencontainers.image.created="2023-06-28T21:16:47Z"
+LABEL org.opencontainers.image.created="2023-06-29T07:00:50Z"
 LABEL org.opencontainers.image.source="https://github.com/viash-io/civ6_pipeline"
-LABEL org.opencontainers.image.revision="c3661b4f97ee76d9b36d7dd8658d3db4eb19a9a9"
+LABEL org.opencontainers.image.revision="ae458ae22e178cfc277673bd63ba60987c55003e"
 LABEL org.opencontainers.image.version="main_build"
 VIASHDOCKER
 }
@@ -611,14 +629,35 @@ while [[ $# -gt 0 ]]; do
             shift 2
             ;;
         --includes)
-            [ -n "$VIASH_PAR_INCLUDES" ] && ViashError Bad arguments for option \'--includes\': \'$VIASH_PAR_INCLUDES\' \& \'$2\' - you should provide exactly one argument for this option. && exit 1
-            VIASH_PAR_INCLUDES="$2"
+            if [ -z "$VIASH_PAR_INCLUDES" ]; then
+              VIASH_PAR_INCLUDES="$2"
+            else
+              VIASH_PAR_INCLUDES="$VIASH_PAR_INCLUDES:""$2"
+            fi
             [ $# -lt 2 ] && ViashError Not enough arguments passed to --includes. Use "--help" to get more information on the parameters. && exit 1
             shift 2
             ;;
         --includes=*)
-            [ -n "$VIASH_PAR_INCLUDES" ] && ViashError Bad arguments for option \'--includes=*\': \'$VIASH_PAR_INCLUDES\' \& \'$2\' - you should provide exactly one argument for this option. && exit 1
-            VIASH_PAR_INCLUDES=$(ViashRemoveFlags "$1")
+            if [ -z "$VIASH_PAR_INCLUDES" ]; then
+              VIASH_PAR_INCLUDES=$(ViashRemoveFlags "$1")
+            else
+              VIASH_PAR_INCLUDES="$VIASH_PAR_INCLUDES:"$(ViashRemoveFlags "$1")
+            fi
+            shift 1
+            ;;
+        --include_std)
+            [ -n "$VIASH_PAR_INCLUDE_STD" ] && ViashError Bad arguments for option \'--include_std\': \'$VIASH_PAR_INCLUDE_STD\' \& \'$2\' - you should provide exactly one argument for this option. && exit 1
+            VIASH_PAR_INCLUDE_STD=true
+            shift 1
+            ;;
+        --include_hex)
+            [ -n "$VIASH_PAR_INCLUDE_HEX" ] && ViashError Bad arguments for option \'--include_hex\': \'$VIASH_PAR_INCLUDE_HEX\' \& \'$2\' - you should provide exactly one argument for this option. && exit 1
+            VIASH_PAR_INCLUDE_HEX=true
+            shift 1
+            ;;
+        --include_type)
+            [ -n "$VIASH_PAR_INCLUDE_TYPE" ] && ViashError Bad arguments for option \'--include_type\': \'$VIASH_PAR_INCLUDE_TYPE\' \& \'$2\' - you should provide exactly one argument for this option. && exit 1
+            VIASH_PAR_INCLUDE_TYPE=true
             shift 1
             ;;
         --format)
@@ -806,6 +845,17 @@ if [ -z ${VIASH_META_TEMP_DIR+x} ]; then
   exit 1
 fi
 
+# filling in defaults
+if [ -z ${VIASH_PAR_INCLUDE_STD+x} ]; then
+  VIASH_PAR_INCLUDE_STD="false"
+fi
+if [ -z ${VIASH_PAR_INCLUDE_HEX+x} ]; then
+  VIASH_PAR_INCLUDE_HEX="false"
+fi
+if [ -z ${VIASH_PAR_INCLUDE_TYPE+x} ]; then
+  VIASH_PAR_INCLUDE_TYPE="false"
+fi
+
 # check whether required files exist
 if [ ! -z "$VIASH_PAR_INPUT" ] && [ ! -e "$VIASH_PAR_INPUT" ]; then
   ViashError "Input file '$VIASH_PAR_INPUT' does not exist."
@@ -815,12 +865,38 @@ if [ ! -z "$VIASH_PAR_PATTERN" ] && [ ! -e "$VIASH_PAR_PATTERN" ]; then
   ViashError "Input file '$VIASH_PAR_PATTERN' does not exist."
   exit 1
 fi
-if [ ! -z "$VIASH_PAR_INCLUDES" ] && [ ! -e "$VIASH_PAR_INCLUDES" ]; then
-  ViashError "Input file '$VIASH_PAR_INCLUDES' does not exist."
-  exit 1
+if [ ! -z "$VIASH_PAR_INCLUDES" ]; then
+  IFS=':'
+  set -f
+  for file in $VIASH_PAR_INCLUDES; do
+    unset IFS
+    if [ ! -e "$file" ]; then
+      ViashError "Input file '$file' does not exist."
+      exit 1
+    fi
+  done
+  set +f
 fi
 
 # check whether parameters values are of the right type
+if [[ -n "$VIASH_PAR_INCLUDE_STD" ]]; then
+  if ! [[ "$VIASH_PAR_INCLUDE_STD" =~ ^(true|True|TRUE|false|False|FALSE|yes|Yes|YES|no|No|NO)$ ]]; then
+    ViashError '--include_std' has to be a boolean_true. Use "--help" to get more information on the parameters.
+    exit 1
+  fi
+fi
+if [[ -n "$VIASH_PAR_INCLUDE_HEX" ]]; then
+  if ! [[ "$VIASH_PAR_INCLUDE_HEX" =~ ^(true|True|TRUE|false|False|FALSE|yes|Yes|YES|no|No|NO)$ ]]; then
+    ViashError '--include_hex' has to be a boolean_true. Use "--help" to get more information on the parameters.
+    exit 1
+  fi
+fi
+if [[ -n "$VIASH_PAR_INCLUDE_TYPE" ]]; then
+  if ! [[ "$VIASH_PAR_INCLUDE_TYPE" =~ ^(true|True|TRUE|false|False|FALSE|yes|Yes|YES|no|No|NO)$ ]]; then
+    ViashError '--include_type' has to be a boolean_true. Use "--help" to get more information on the parameters.
+    exit 1
+  fi
+fi
 if [[ -n "$VIASH_META_CPUS" ]]; then
   if ! [[ "$VIASH_META_CPUS" =~ ^[-+]?[0-9]+$ ]]; then
     ViashError 'cpus' has to be an integer. Use "--help" to get more information on the parameters.
@@ -864,6 +940,19 @@ if [[ -n "$VIASH_META_MEMORY_PB" ]]; then
   fi
 fi
 
+# check whether value is belongs to a set of choices
+if [ ! -z "$VIASH_PAR_FORMAT" ]; then
+  VIASH_PAR_FORMAT_CHOICES=("json:yaml:html")
+  IFS=':'
+  set -f
+  if ! [[ ":${VIASH_PAR_FORMAT_CHOICES[*]}:" =~ ":$VIASH_PAR_FORMAT:" ]]; then
+    ViashError '--format' specified value of \'$VIASH_PAR_FORMAT\' is not in the list of allowed values. Use "--help" to get more information on the parameters.
+    exit 1
+  fi
+  set +f
+  unset IFS
+fi
+
 # create parent directories of output files, if so desired
 if [ ! -z "$VIASH_PAR_OUTPUT" ] && [ ! -d "$(dirname "$VIASH_PAR_OUTPUT")" ]; then
   mkdir -p "$(dirname "$VIASH_PAR_OUTPUT")"
@@ -880,8 +969,15 @@ if [ ! -z "$VIASH_PAR_PATTERN" ]; then
   VIASH_PAR_PATTERN=$(ViashAutodetectMount "$VIASH_PAR_PATTERN")
 fi
 if [ ! -z "$VIASH_PAR_INCLUDES" ]; then
-  VIASH_EXTRA_MOUNTS+=( $(ViashAutodetectMountArg "$VIASH_PAR_INCLUDES") )
-  VIASH_PAR_INCLUDES=$(ViashAutodetectMount "$VIASH_PAR_INCLUDES")
+  VIASH_TEST_INCLUDES=()
+  IFS=':'
+  for var in $VIASH_PAR_INCLUDES; do
+    unset IFS
+    VIASH_EXTRA_MOUNTS+=( $(ViashAutodetectMountArg "$var") )
+    var=$(ViashAutodetectMount "$var")
+    VIASH_TEST_INCLUDES+=( "$var" )
+  done
+  VIASH_PAR_INCLUDES=$(IFS=':' ; echo "${VIASH_TEST_INCLUDES[*]}")
 fi
 if [ ! -z "$VIASH_PAR_OUTPUT" ]; then
   VIASH_EXTRA_MOUNTS+=( $(ViashAutodetectMountArg "$VIASH_PAR_OUTPUT") )
@@ -947,6 +1043,9 @@ cat > "\$tempscript" << 'VIASHMAIN'
 $( if [ ! -z ${VIASH_PAR_INPUT+x} ]; then echo "${VIASH_PAR_INPUT}" | sed "s#'#'\"'\"'#g;s#.*#par_input='&'#" ; else echo "# par_input="; fi )
 $( if [ ! -z ${VIASH_PAR_PATTERN+x} ]; then echo "${VIASH_PAR_PATTERN}" | sed "s#'#'\"'\"'#g;s#.*#par_pattern='&'#" ; else echo "# par_pattern="; fi )
 $( if [ ! -z ${VIASH_PAR_INCLUDES+x} ]; then echo "${VIASH_PAR_INCLUDES}" | sed "s#'#'\"'\"'#g;s#.*#par_includes='&'#" ; else echo "# par_includes="; fi )
+$( if [ ! -z ${VIASH_PAR_INCLUDE_STD+x} ]; then echo "${VIASH_PAR_INCLUDE_STD}" | sed "s#'#'\"'\"'#g;s#.*#par_include_std='&'#" ; else echo "# par_include_std="; fi )
+$( if [ ! -z ${VIASH_PAR_INCLUDE_HEX+x} ]; then echo "${VIASH_PAR_INCLUDE_HEX}" | sed "s#'#'\"'\"'#g;s#.*#par_include_hex='&'#" ; else echo "# par_include_hex="; fi )
+$( if [ ! -z ${VIASH_PAR_INCLUDE_TYPE+x} ]; then echo "${VIASH_PAR_INCLUDE_TYPE}" | sed "s#'#'\"'\"'#g;s#.*#par_include_type='&'#" ; else echo "# par_include_type="; fi )
 $( if [ ! -z ${VIASH_PAR_FORMAT+x} ]; then echo "${VIASH_PAR_FORMAT}" | sed "s#'#'\"'\"'#g;s#.*#par_format='&'#" ; else echo "# par_format="; fi )
 $( if [ ! -z ${VIASH_PAR_OUTPUT+x} ]; then echo "${VIASH_PAR_OUTPUT}" | sed "s#'#'\"'\"'#g;s#.*#par_output='&'#" ; else echo "# par_output="; fi )
 $( if [ ! -z ${VIASH_META_FUNCTIONALITY_NAME+x} ]; then echo "${VIASH_META_FUNCTIONALITY_NAME}" | sed "s#'#'\"'\"'#g;s#.*#meta_functionality_name='&'#" ; else echo "# meta_functionality_name="; fi )
@@ -968,12 +1067,34 @@ $( if [ ! -z ${VIASH_META_MEMORY_PB+x} ]; then echo "${VIASH_META_MEMORY_PB}" | 
 if [ -f "\$par_output" ]; then
   rm "\$par_output"
 fi
+
+extra_args=()
+
+# generate includes arguments
+IFS=':'
+for var in \$par_includes; do
+  unset IFS
+  extra_args+=( --includes "\$var" )
+done
+
+if [ "\$par_include_std" == "true" ]; then
+  extra_args+=( --includes "/opt/ImHex-Patterns/includes/std/" )
+fi
+if [ "\$par_include_hex" == "true" ]; then
+  extra_args+=( --includes "/opt/ImHex-Patterns/includes/hex/" )
+fi
+if [ "\$par_include_type" == "true" ]; then
+  extra_args+=( --includes "/opt/ImHex-Patterns/includes/type/" )
+fi
+
+# run command
 plcli format \\
   --input "\$par_input" \\
   --pattern "\$par_pattern" \\
   --output "\$par_output" \\
-  \${par_includes:+--includes \$par_includes} \\
-  \${par_format:+--format \$par_format}
+  \${par_format:+--format \$par_format} \\
+  "\${extra_args[@]}" \\
+  --verbose
 
 VIASHMAIN
 bash "\$tempscript" &
@@ -990,7 +1111,17 @@ if [ ! -z "$VIASH_PAR_PATTERN" ]; then
   VIASH_PAR_PATTERN=$(ViashStripAutomount "$VIASH_PAR_PATTERN")
 fi
 if [ ! -z "$VIASH_PAR_INCLUDES" ]; then
-  VIASH_PAR_INCLUDES=$(ViashStripAutomount "$VIASH_PAR_INCLUDES")
+  unset VIASH_TEST_INCLUDES
+  IFS=':'
+  for var in $VIASH_PAR_INCLUDES; do
+    unset IFS
+    if [ -z "$VIASH_TEST_INCLUDES" ]; then
+      VIASH_TEST_INCLUDES="$(ViashStripAutomount "$var")"
+    else
+      VIASH_TEST_INCLUDES="$VIASH_TEST_INCLUDES:""$(ViashStripAutomount "$var")"
+    fi
+  done
+  VIASH_PAR_INCLUDES="$VIASH_TEST_INCLUDES"
 fi
 if [ ! -z "$VIASH_PAR_OUTPUT" ]; then
   VIASH_PAR_OUTPUT=$(ViashStripAutomount "$VIASH_PAR_OUTPUT")

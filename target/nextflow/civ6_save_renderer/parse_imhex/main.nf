@@ -32,7 +32,7 @@ thisConfig = processConfig(jsonSlurper.parseText('''{
         "alternatives" : [
           "-i"
         ],
-        "description" : "Input file",
+        "description" : "Specify the input file to be parsed.",
         "example" : [
           "input.bin"
         ],
@@ -50,9 +50,9 @@ thisConfig = processConfig(jsonSlurper.parseText('''{
         "alternatives" : [
           "-p"
         ],
-        "description" : "Pattern file",
+        "description" : "Specify the imhex file (.hex) to be used for parsing.",
         "example" : [
-          "pattern.hexpat"
+          "pattern.hex"
         ],
         "must_exist" : true,
         "create_parent" : true,
@@ -65,7 +65,7 @@ thisConfig = processConfig(jsonSlurper.parseText('''{
       {
         "type" : "file",
         "name" : "--includes",
-        "description" : "Include dir",
+        "description" : "Specify one or more directories containing imhex patterns (.imhex) to be included as libraries.",
         "example" : [
           "dir"
         ],
@@ -73,8 +73,29 @@ thisConfig = processConfig(jsonSlurper.parseText('''{
         "create_parent" : true,
         "required" : false,
         "direction" : "input",
-        "multiple" : false,
+        "multiple" : true,
         "multiple_sep" : ":",
+        "dest" : "par"
+      },
+      {
+        "type" : "boolean_true",
+        "name" : "--include_std",
+        "description" : "Whether to include the std library from the ImHex-Patterns repository",
+        "direction" : "input",
+        "dest" : "par"
+      },
+      {
+        "type" : "boolean_true",
+        "name" : "--include_hex",
+        "description" : "Whether to include the hex library from the ImHex-Patterns repository",
+        "direction" : "input",
+        "dest" : "par"
+      },
+      {
+        "type" : "boolean_true",
+        "name" : "--include_type",
+        "description" : "Whether to include the type library from the ImHex-Patterns repository",
+        "direction" : "input",
         "dest" : "par"
       },
       {
@@ -83,11 +104,16 @@ thisConfig = processConfig(jsonSlurper.parseText('''{
         "alternatives" : [
           "-f"
         ],
-        "description" : "Format (json, yaml, html)",
+        "description" : "Specify the output format for the parsed data.",
         "example" : [
           "dir"
         ],
         "required" : false,
+        "choices" : [
+          "json",
+          "yaml",
+          "html"
+        ],
         "direction" : "input",
         "multiple" : false,
         "multiple_sep" : ":",
@@ -99,9 +125,9 @@ thisConfig = processConfig(jsonSlurper.parseText('''{
         "alternatives" : [
           "-o"
         ],
-        "description" : "Output file",
+        "description" : "Specify the output file for the parsed data.",
         "example" : [
-          "output.txt"
+          "output.json"
         ],
         "must_exist" : true,
         "create_parent" : true,
@@ -120,7 +146,7 @@ thisConfig = processConfig(jsonSlurper.parseText('''{
         "parent" : "file:/home/runner/work/civ6_pipeline/civ6_pipeline/src/civ6_save_renderer/parse_imhex/"
       }
     ],
-    "description" : "...",
+    "description" : "This functionality uses an ImHex format (.hex) to parse a binary file into a JSON format.",
     "status" : "enabled",
     "set_wd_to_resources_dir" : false
   },
@@ -153,7 +179,13 @@ thisConfig = processConfig(jsonSlurper.parseText('''{
         {
           "type" : "docker",
           "run" : [
-            "git clone --recurse-submodules https://github.com/WerWolv/PatternLanguage.git && \\\\\n  mkdir -p PatternLanguage/build && \\\\\n  cd PatternLanguage/build && \\\\\n  CC=gcc-12 CXX=g++-12 cmake                \\\\\n    -DCMAKE_BUILD_TYPE=Debug                \\\\\n    -DCMAKE_INSTALL_PREFIX=\\"/usr\\"           \\\\\n    -DCMAKE_C_FLAGS=\\"-fuse-ld=lld\\"          \\\\\n    -DCMAKE_CXX_FLAGS=\\"-fuse-ld=lld\\"        \\\\\n    -DLIBPL_ENABLE_TESTS=OFF                \\\\\n    -DLIBPL_ENABLE_CLI=ON                   \\\\\n    .. && \\\\\n  make install\n"
+            "git clone --depth 1 --recurse-submodules --shallow-submodules https://github.com/WerWolv/PatternLanguage.git /opt/PatternLanguage && \\\\\n  cd /opt/PatternLanguage/ && \\\\\n  mkdir -p build && \\\\\n  cd build && \\\\\n  CC=gcc-12 CXX=g++-12 cmake                \\\\\n    -DCMAKE_BUILD_TYPE=Debug                \\\\\n    -DCMAKE_INSTALL_PREFIX=\\"/usr\\"           \\\\\n    -DCMAKE_C_FLAGS=\\"-fuse-ld=lld\\"          \\\\\n    -DCMAKE_CXX_FLAGS=\\"-fuse-ld=lld\\"        \\\\\n    -DLIBPL_ENABLE_TESTS=OFF                \\\\\n    -DLIBPL_ENABLE_CLI=ON                   \\\\\n    .. && \\\\\n  make install\n"
+          ]
+        },
+        {
+          "type" : "docker",
+          "run" : [
+            "git clone --depth 1 https://github.com/WerWolv/ImHex-Patterns.git /opt/ImHex-Patterns\n"
           ]
         }
       ]
@@ -180,7 +212,7 @@ thisConfig = processConfig(jsonSlurper.parseText('''{
     "config" : "/home/runner/work/civ6_pipeline/civ6_pipeline/src/civ6_save_renderer/parse_imhex/config.vsh.yaml",
     "platform" : "nextflow",
     "viash_version" : "0.7.3",
-    "git_commit" : "c3661b4f97ee76d9b36d7dd8658d3db4eb19a9a9",
+    "git_commit" : "ae458ae22e178cfc277673bd63ba60987c55003e",
     "git_remote" : "https://github.com/viash-io/civ6_pipeline"
   }
 }'''))
@@ -194,6 +226,9 @@ cat > "$tempscript" << VIASHMAIN
 $( if [ ! -z ${VIASH_PAR_INPUT+x} ]; then echo "${VIASH_PAR_INPUT}" | sed "s#'#'\\"'\\"'#g;s#.*#par_input='&'#" ; else echo "# par_input="; fi )
 $( if [ ! -z ${VIASH_PAR_PATTERN+x} ]; then echo "${VIASH_PAR_PATTERN}" | sed "s#'#'\\"'\\"'#g;s#.*#par_pattern='&'#" ; else echo "# par_pattern="; fi )
 $( if [ ! -z ${VIASH_PAR_INCLUDES+x} ]; then echo "${VIASH_PAR_INCLUDES}" | sed "s#'#'\\"'\\"'#g;s#.*#par_includes='&'#" ; else echo "# par_includes="; fi )
+$( if [ ! -z ${VIASH_PAR_INCLUDE_STD+x} ]; then echo "${VIASH_PAR_INCLUDE_STD}" | sed "s#'#'\\"'\\"'#g;s#.*#par_include_std='&'#" ; else echo "# par_include_std="; fi )
+$( if [ ! -z ${VIASH_PAR_INCLUDE_HEX+x} ]; then echo "${VIASH_PAR_INCLUDE_HEX}" | sed "s#'#'\\"'\\"'#g;s#.*#par_include_hex='&'#" ; else echo "# par_include_hex="; fi )
+$( if [ ! -z ${VIASH_PAR_INCLUDE_TYPE+x} ]; then echo "${VIASH_PAR_INCLUDE_TYPE}" | sed "s#'#'\\"'\\"'#g;s#.*#par_include_type='&'#" ; else echo "# par_include_type="; fi )
 $( if [ ! -z ${VIASH_PAR_FORMAT+x} ]; then echo "${VIASH_PAR_FORMAT}" | sed "s#'#'\\"'\\"'#g;s#.*#par_format='&'#" ; else echo "# par_format="; fi )
 $( if [ ! -z ${VIASH_PAR_OUTPUT+x} ]; then echo "${VIASH_PAR_OUTPUT}" | sed "s#'#'\\"'\\"'#g;s#.*#par_output='&'#" ; else echo "# par_output="; fi )
 $( if [ ! -z ${VIASH_META_FUNCTIONALITY_NAME+x} ]; then echo "${VIASH_META_FUNCTIONALITY_NAME}" | sed "s#'#'\\"'\\"'#g;s#.*#meta_functionality_name='&'#" ; else echo "# meta_functionality_name="; fi )
@@ -215,12 +250,34 @@ $( if [ ! -z ${VIASH_META_MEMORY_PB+x} ]; then echo "${VIASH_META_MEMORY_PB}" | 
 if [ -f "\\$par_output" ]; then
   rm "\\$par_output"
 fi
+
+extra_args=()
+
+# generate includes arguments
+IFS=':'
+for var in \\$par_includes; do
+  unset IFS
+  extra_args+=( --includes "\\$var" )
+done
+
+if [ "\\$par_include_std" == "true" ]; then
+  extra_args+=( --includes "/opt/ImHex-Patterns/includes/std/" )
+fi
+if [ "\\$par_include_hex" == "true" ]; then
+  extra_args+=( --includes "/opt/ImHex-Patterns/includes/hex/" )
+fi
+if [ "\\$par_include_type" == "true" ]; then
+  extra_args+=( --includes "/opt/ImHex-Patterns/includes/type/" )
+fi
+
+# run command
 plcli format \\\\
   --input "\\$par_input" \\\\
   --pattern "\\$par_pattern" \\\\
   --output "\\$par_output" \\\\
-  \\${par_includes:+--includes \\$par_includes} \\\\
-  \\${par_format:+--format \\$par_format}
+  \\${par_format:+--format \\$par_format} \\\\
+  "\\${extra_args[@]}" \\\\
+  --verbose
 
 VIASHMAIN
 bash "$tempscript"

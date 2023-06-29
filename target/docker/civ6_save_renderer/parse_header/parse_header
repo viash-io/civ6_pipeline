@@ -390,9 +390,9 @@ FROM node:15-buster
 
 RUN cd /home/node && npm install civ6-save-parser
 LABEL org.opencontainers.image.description="Companion container for running component civ6_save_renderer parse_header"
-LABEL org.opencontainers.image.created="2023-06-28T21:16:48Z"
+LABEL org.opencontainers.image.created="2023-06-29T07:00:50Z"
 LABEL org.opencontainers.image.source="https://github.com/viash-io/civ6_pipeline"
-LABEL org.opencontainers.image.revision="c3661b4f97ee76d9b36d7dd8658d3db4eb19a9a9"
+LABEL org.opencontainers.image.revision="ae458ae22e178cfc277673bd63ba60987c55003e"
 LABEL org.opencontainers.image.version="main_build"
 VIASHDOCKER
 }
