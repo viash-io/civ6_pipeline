@@ -50,6 +50,7 @@ platforms:
           - ggplot2
           - tibble
           - processx
+          - stringr
         github:
           - rcannood/civ6saves
   - type: nextflow

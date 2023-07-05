@@ -394,13 +394,13 @@ function ViashDockerfile {
 FROM eddelbuettel/r2u:22.04
 
 RUN Rscript -e 'if (!requireNamespace("remotes", quietly = TRUE)) install.packages("remotes")' && \
-  Rscript -e 'remotes::install_cran(c("ggforce", "yaml", "bit64", "ggnewscale", "cowplot", "readr", "purrr", "dplyr", "ggplot2", "tibble", "processx"), repos = "https://cran.rstudio.com")' && \
+  Rscript -e 'remotes::install_cran(c("ggforce", "yaml", "bit64", "ggnewscale", "cowplot", "readr", "purrr", "dplyr", "ggplot2", "tibble", "processx", "stringr"), repos = "https://cran.rstudio.com")' && \
   Rscript -e 'remotes::install_github(c("rcannood/civ6saves"), repos = "https://cran.rstudio.com")'
 
 LABEL org.opencontainers.image.description="Companion container for running component civ6_save_renderer plot_map"
-LABEL org.opencontainers.image.created="2023-06-29T12:00:57Z"
+LABEL org.opencontainers.image.created="2023-07-05T19:47:39Z"
 LABEL org.opencontainers.image.source="https://github.com/viash-io/civ6_pipeline"
-LABEL org.opencontainers.image.revision="c06d0466099674e64efb4473f0792d6ae944645a"
+LABEL org.opencontainers.image.revision="a13a00a7144b3c5f75db80d8268bc7ad592d3ee0"
 LABEL org.opencontainers.image.version="main_build"
 VIASHDOCKER
 }

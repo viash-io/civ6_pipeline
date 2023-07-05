@@ -75,5 +75,5 @@ info:
   output: "/home/runner/work/civ6_pipeline/civ6_pipeline/target/native/civ6_save_renderer/parse_map"
   executable: "/home/runner/work/civ6_pipeline/civ6_pipeline/target/native/civ6_save_renderer/parse_map/parse_map"
   viash_version: "0.7.3"
-  git_commit: "c06d0466099674e64efb4473f0792d6ae944645a"
+  git_commit: "a13a00a7144b3c5f75db80d8268bc7ad592d3ee0"
   git_remote: "https://github.com/viash-io/civ6_pipeline"
