@@ -36,7 +36,7 @@ functionality:
 platforms:
   - type: docker
     image: eddelbuettel/r2u:22.04
-    setup: 
+    setup:
       - type: r
         cran:
           - ggforce

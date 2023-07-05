@@ -8,7 +8,7 @@ const zlib = require('zlib');
 function decompress(savefile) {
   const civsav = savefile;
   const bufstartindex =
-    civsav.indexOf(Buffer.from([0, 0, 0, 0, 0, 1, 0, 0x78, 0x9c])) + 7;
+    civsav.indexOf(Buffer.from([0, 0, 1, 0, 0x78, 0x9c])) + 4;
   const bufendindex = civsav.lastIndexOf(Buffer.from([0x00, 0x00, 0xFF, 0xFF]));
 
   const data = civsav.slice(bufstartindex, bufendindex);
@@ -51,6 +51,11 @@ function savetomap(savefile) {
   while (width === 0) {
     mapWidthStartIndex += 1;
     mapWidthStartIndex = bin.indexOf(mapWidthSearchBuffer, mapWidthStartIndex);
+
+    if (mapWidthStartIndex == -1) {
+      throw new Error(`Couldn't find map width start index...`)
+    }
+
     width = bin.readInt16LE(mapWidthStartIndex + 8);
     
     if (width < 0) {
@@ -90,37 +95,21 @@ function savetomap(savefile) {
       'flags1': bin.readUInt8(mindex + 48),                // bits: [is_pillaged, road_pillaged??, has_road, is_capital_or_citystate, -, river_sw, river_e, river_se]
       'flags2': bin.readUInt8(mindex + 49),                // bits: [cliff_sw, cliff_e, cliff_se, -, -, is_impassable, is_owned, -]
       'flags3': bin.readUInt8(mindex + 50),                // bits: [is_ice, -, -, -, -, -, -, -]
-      'flags4': bin.readUInt8(mindex + 51),                // bits: [buffer length 24, buffer length 44, -, -, -, -, -, -]
-      'flags5': bin.readUInt8(mindex + 52),                // empty?
-      'flags6': bin.readUInt8(mindex + 53),                // empty?
-      'flags7': bin.readUInt8(mindex + 54),                // empty?
+      'overlayNum': bin.readUint32LE(mindex + 51),
     }
     mindex += 55;
-    
-    let buflength = 0;
 
-    if (obj['flags4'] & 1) {
-      // tile produces/captures co2?
-      obj['buffer1'] = bin.slice(mindex, mindex + 24).toString('hex');
-      obj['buffer1_flag'] = bin.readUInt8(mindex + 20);
-      mindex += 24;
-     
-      if (obj['buffer1_flag'] & 1) {
-        // tile is ski resort or tunnel??
-        obj['buffer2'] = bin.slice(mindex, mindex + 20).toString('hex');
-        mindex += 20;
-      } else {
-        obj['buffer2'] = '';
-      }
-    } else if (obj['flags4'] & 2) {
-      obj['buffer1'] = bin.slice(mindex, mindex + 24).toString('hex');
-      obj['buffer1_flag'] = bin.readUInt8(mindex + 20);
-      obj['buffer2'] = bin.slice(mindex + 24, mindex + 44).toString('hex');
-      mindex += 44;
+    let buflength = {
+      1: 24,
+      2: 44,
+      3: 64
+    }[obj.overlayNum];
+
+    if (buflength) {
+      obj['buffer'] = bin.slice(mindex, mindex + buflength).toString('hex');
+      mindex += buflength;
     } else {
-      obj['buffer1'] = '';
-      obj['buffer1_flag'] = '';
-      obj['buffer2'] = '';
+      obj['buffer'] = '';
     }
 
     if (obj['flags2'] & 64) {
@@ -137,6 +126,44 @@ function savetomap(savefile) {
       obj['district'] = '';
       obj['owner'] = '';
       obj['world_wonder'] = '';
+    }
+
+    // Validate next tile terrain to get us synced back up if buffer is bad
+    if (i < tiles - 1) {
+      const terrains = [
+        2213004848,
+        1855786096,
+        1602466867,
+        4226188894,
+        3872285854,
+        2746853616,
+        3852995116,
+        3108058291,
+        1418772217,
+        1223859883,
+        3949113590,
+        3746160061,
+        1743422479,
+        3842183808,
+        699483892,
+        1248885265,
+        1204357597
+      ];
+
+      let nextTerrainOffset = 0;
+
+      const SEARCH_LENGTH = 1000;
+
+      while (
+        nextTerrainOffset < SEARCH_LENGTH &&
+        !terrains.includes(bin.readUint32LE(mindex + nextTerrainOffset))
+      ) {
+        nextTerrainOffset++;
+      }
+
+      if (nextTerrainOffset < SEARCH_LENGTH) {
+        mindex = mindex - 12 + nextTerrainOffset;
+      }
     }
     
     obj['tile_length'] = mindex - orig_mindex;

@@ -72,5 +72,5 @@ info:
   output: "/home/runner/work/civ6_pipeline/civ6_pipeline/target/nextflow/civ6_save_renderer/convert_plot"
   executable: "/home/runner/work/civ6_pipeline/civ6_pipeline/target/nextflow/civ6_save_renderer/convert_plot/convert_plot"
   viash_version: "0.7.3"
-  git_commit: "a13a00a7144b3c5f75db80d8268bc7ad592d3ee0"
+  git_commit: "df76affd4a768368f1d6520838b49a03afeda77e"
   git_remote: "https://github.com/viash-io/civ6_pipeline"
