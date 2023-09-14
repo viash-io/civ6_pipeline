@@ -55,8 +55,8 @@ const terrains = [
  */
 function savetomap(savefile) {
   const bin = decompress(savefile);
-  const searchBuffer = Buffer.from([0x0E, 0x00, 0x00, 0x00, 0x0F, 0x00, 0x00, 0x00, 0x06, 0x00, 0x00, 0x00]);
-  let mapstartindex = bin.indexOf(searchBuffer);
+  // const searchBuffer = Buffer.from([0x0E, 0x00, 0x00, 0x00, 0x0F, 0x00, 0x00, 0x00, 0x06, 0x00, 0x00, 0x00]);
+  let mapstartindex = -1; // bin.indexOf(searchBuffer);
 
   if (mapstartindex === -1) {
     // Alternate search method by first terrain located
