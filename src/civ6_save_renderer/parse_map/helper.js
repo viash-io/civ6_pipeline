@@ -28,6 +28,26 @@ function decompress(savefile) {
   return decompressed;
 }
 
+const terrains = [
+  2213004848,
+  1855786096,
+  1602466867,
+  4226188894,
+  3872285854,
+  2746853616,
+  3852995116,
+  3108058291,
+  1418772217,
+  1223859883,
+  3949113590,
+  3746160061,
+  1743422479,
+  3842183808,
+  699483892,
+  1248885265,
+  1204357597
+];
+
 /**
  * Convert compressed tile data in .Civ6Save file into json format
  * @param {buffer} savefile
@@ -35,8 +55,30 @@ function decompress(savefile) {
  */
 function savetomap(savefile) {
   const bin = decompress(savefile);
-  const searchBuffer = Buffer.from([0x0E, 0x00, 0x00, 0x00, 0x0F, 0x00, 0x00, 0x00, 0x06, 0x00, 0x00, 0x00]);
-  const mapstartindex = bin.indexOf(searchBuffer);
+  // const searchBuffer = Buffer.from([0x0E, 0x00, 0x00, 0x00, 0x0F, 0x00, 0x00, 0x00, 0x06, 0x00, 0x00, 0x00]);
+  let mapstartindex = -1; // bin.indexOf(searchBuffer);
+
+  if (mapstartindex === -1) {
+    // Alternate search method by first terrain located
+    let firstTerrainIndex = Number.MAX_SAFE_INTEGER;
+
+    for (const terrain of terrains) {
+      var terrainBuf = Buffer.alloc(4);
+      terrainBuf.writeUInt32LE(terrain);
+      const terrainIndex = bin.indexOf(terrainBuf);
+
+      if (terrainIndex > -1 && terrainIndex < firstTerrainIndex) {
+        firstTerrainIndex = terrainIndex;
+      }
+    }
+
+    if (firstTerrainIndex === Number.MAX_SAFE_INTEGER) {
+      throw new Error("Could not find mapstartindex!");
+    }
+
+    mapstartindex = firstTerrainIndex - 28;
+  }
+
   const tiles = bin.readInt32LE(mapstartindex + 12);
   const map = {'tiles': []};
 
@@ -130,26 +172,6 @@ function savetomap(savefile) {
 
     // Validate next tile terrain to get us synced back up if buffer is bad
     if (i < tiles - 1) {
-      const terrains = [
-        2213004848,
-        1855786096,
-        1602466867,
-        4226188894,
-        3872285854,
-        2746853616,
-        3852995116,
-        3108058291,
-        1418772217,
-        1223859883,
-        3949113590,
-        3746160061,
-        1743422479,
-        3842183808,
-        699483892,
-        1248885265,
-        1204357597
-      ];
-
       let nextTerrainOffset = 0;
 
       const SEARCH_LENGTH = 1000;
